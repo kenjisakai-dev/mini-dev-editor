@@ -1,0 +1,14 @@
+{
+  "name": "mini-dev-editor",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Kenji Sakai",
+  "license": "MIT",
+  "description": "Editor Dev",
+  "devDependencies": {
+    "electron": "^37.0.0"
+  }
+}
