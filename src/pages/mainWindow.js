@@ -1,7 +1,7 @@
 const path = require("path");
 const { BrowserWindow, nativeImage, nativeTheme } = require("electron");
 const { buildTemplateMenu } = require("../menu/menuMainWindow");
-const { themeApp, colorTextApp } = require("../config/config");
+const { themeApp, colorTextApp, zoomApp } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
 
 let win;
@@ -28,6 +28,7 @@ const createMainWindow = () => {
   win.webContents.on("did-finish-load", () => {
     win.webContents.send("set-theme", themeApp());
     win.webContents.send("set-color", `var(--${colorTextApp()})`);
+    win.webContents.setZoomFactor(zoomApp());
   });
 
   win.on("close", (event) => {

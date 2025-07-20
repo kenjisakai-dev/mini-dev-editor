@@ -54,3 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
 area.addEventListener("scroll", () => {
   linha.scrollTop = area.scrollTop;
 });
+
+api.setFont((_event, font) => {
+  document.body.style.fontFamily = font;
+  area.style.fontFamily = font;
+});

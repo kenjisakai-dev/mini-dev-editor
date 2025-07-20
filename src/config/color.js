@@ -1,6 +1,6 @@
 const { saveConfigApp } = require("./config");
 
-const setColorText = (win, colorSelected) => {
+const setColorTextApp = (win, colorSelected) => {
   try {
     win.webContents.send("set-color", `var(--${colorSelected})`);
     saveConfigApp({ colorTextApp: colorSelected });
@@ -10,5 +10,5 @@ const setColorText = (win, colorSelected) => {
 };
 
 module.exports = {
-  setColorText,
+  setColorTextApp,
 };

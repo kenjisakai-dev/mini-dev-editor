@@ -1,11 +1,19 @@
 const path = require("path");
 const { Menu, nativeImage, nativeTheme } = require("electron");
-const { colorTextApp, themeApp } = require("../config/config");
+const {
+  colorTextApp,
+  themeApp,
+  fontApp,
+  zoomApp,
+  zoomAppDefault,
+} = require("../config/config");
 const { openFile, saveFile } = require("../service/contentFile");
 const { dialogNewFile, dialogConfirmExit } = require("./dialogFile");
 const { setThemeApp } = require("../config/theme");
-const { setColorText } = require("../config/color");
+const { setColorTextApp } = require("../config/color");
+const { setFontApp } = require("../config/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
+const { setZoomApp } = require("../config/zoom");
 
 const buildTemplateMenu = (win) => {
   const getIcon = (iconName) => {
@@ -113,21 +121,91 @@ const buildTemplateMenu = (win) => {
       submenu: [
         {
           label: "Aplicar zoom",
-          role: "zoomIn",
           accelerator: "CmdOrCtrl+=",
+          click: () => {
+            const zoom = parseFloat((zoomApp() + 0.1).toFixed(1));
+            if (zoom <= 2) {
+              win.webContents.setZoomFactor(zoom);
+              setZoomApp(zoom);
+            }
+          },
           icon: getIconTheme("zoom-in"),
         },
         {
           label: "Reduzir zoom",
-          role: "zoomOut",
           accelerator: "CmdOrCtrl+-",
+          click: () => {
+            const zoom = parseFloat((zoomApp() - 0.1).toFixed(1));
+            if (zoom >= 1) {
+              win.webContents.setZoomFactor(zoom);
+              setZoomApp(zoom);
+            }
+          },
           icon: getIconTheme("zoom-out"),
         },
         {
+          type: "separator",
+        },
+        {
           label: "Restaurar zoom",
-          role: "resetZoom",
           accelerator: "CmdOrCtrl+0",
-          icon: getIconTheme("zoom-reset"),
+          click: () => {
+            win.webContents.setZoomFactor(zoomAppDefault());
+            setZoomApp(zoomAppDefault());
+          },
+          icon: getIconTheme("reset"),
+        },
+      ],
+    },
+    {
+      label: "Fonte",
+      submenu: [
+        {
+          label: "Source Code Pro",
+          click: () => {
+            setFontApp(win, "Source Code Pro");
+            buildTemplateMenu(win);
+          },
+          type: "checkbox",
+          checked: fontApp() === "Source Code Pro",
+        },
+        {
+          label: "Inter",
+          click: () => {
+            setFontApp(win, "Inter");
+            buildTemplateMenu(win);
+          },
+          type: "checkbox",
+          checked: fontApp() === "Inter",
+        },
+        {
+          label: "Bebas Neue",
+          click: () => {
+            setFontApp(win, "Bebas Neue");
+            buildTemplateMenu(win);
+          },
+          type: "checkbox",
+          checked: fontApp() === "Bebas Neue",
+        },
+        {
+          label: "Arial",
+          click: () => {
+            setFontApp(win, "Arial");
+            buildTemplateMenu(win);
+          },
+          type: "checkbox",
+          checked: fontApp() === "Arial",
+        },
+        {
+          type: "separator",
+        },
+        {
+          label: "Restaurar Fonte",
+          click: () => {
+            setFontApp(win, "Source Code Pro");
+            buildTemplateMenu(win);
+          },
+          icon: getIconTheme("reset"),
         },
       ],
     },
@@ -137,7 +215,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Cinza Claro",
           click: () => {
-            setColorText(win, "cinzaClaro");
+            setColorTextApp(win, "cinzaClaro");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -147,7 +225,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Amarelo",
           click: () => {
-            setColorText(win, "amarelo");
+            setColorTextApp(win, "amarelo");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -157,7 +235,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Azul",
           click: () => {
-            setColorText(win, "azul");
+            setColorTextApp(win, "azul");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -167,7 +245,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Laranja",
           click: () => {
-            setColorText(win, "laranja");
+            setColorTextApp(win, "laranja");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -177,7 +255,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Pink",
           click: () => {
-            setColorText(win, "pink");
+            setColorTextApp(win, "pink");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -187,7 +265,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Roxo",
           click: () => {
-            setColorText(win, "roxo");
+            setColorTextApp(win, "roxo");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -197,7 +275,7 @@ const buildTemplateMenu = (win) => {
         {
           label: "Verde",
           click: () => {
-            setColorText(win, "verde");
+            setColorTextApp(win, "verde");
             buildTemplateMenu(win);
           },
           type: "checkbox",
@@ -208,9 +286,9 @@ const buildTemplateMenu = (win) => {
           type: "separator",
         },
         {
-          label: "Restaurar cor",
+          label: "Restaurar Cor",
           click: () => {
-            setColorText(win, "cinzaClaro");
+            setColorTextApp(win, "cinzaClaro");
             buildTemplateMenu(win);
           },
           icon: getIconTheme("reset"),
@@ -244,7 +322,7 @@ const buildTemplateMenu = (win) => {
           type: "separator",
         },
         {
-          label: "Cor do sistema",
+          label: "Cor do Sistema",
           type: "checkbox",
           checked: themeApp() === "system",
           click: () => {
