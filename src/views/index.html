@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="titulo">Mini Dev Editor</title>
 
+    <link
+      rel="stylesheet"
+      href="../../node_modules/@xterm/xterm/css/xterm.css"
+    />
     <link rel="stylesheet" href="../public/css/style.css" />
 
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
   </head>
   <body>
-    <div id="linhas"></div>
-    <textarea id="txtArea" spellcheck="false" wrap="off"></textarea>
+    <div id="container">
+      <div id="txtEditor">
+        <div id="linhas"></div>
+        <textarea id="txtArea" spellcheck="false" wrap="off"></textarea>
+      </div>
+      <div id="terminal"></div>
+    </div>
 
+    <script src="../../node_modules/@xterm/xterm/lib/xterm.js"></script>
+    <script src="../../node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <script src="renderer.js"></script>
   </body>
 </html>

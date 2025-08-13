@@ -1,12 +1,8 @@
-const { app, BrowserWindow, globalShortcut } = require("electron");
-const { createMainWindow, win } = require("./src/pages/mainWindow");
+const { app, BrowserWindow } = require("electron");
+const { createMainWindow } = require("./src/pages/mainWindow");
 
 app.whenReady().then(() => {
   createMainWindow();
-
-  globalShortcut.register("CmdOrCtrl+Shift+I", () => {
-    win.webContents.toggleDevTools();
-  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createMainWindow();

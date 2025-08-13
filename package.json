@@ -10,5 +10,9 @@
   "description": "Editor Dev",
   "devDependencies": {
     "electron": "^37.0.0"
+  },
+  "dependencies": {
+    "@xterm/xterm": "^5.5.0",
+    "xterm-addon-fit": "^0.8.0"
   }
 }
