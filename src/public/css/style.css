@@ -56,6 +56,7 @@ body,
 
 #txtEditor {
   display: none;
+  background-color: var(--fundo);
 }
 
 #txtEditor * {
@@ -71,6 +72,7 @@ body,
   width: 8%;
   float: left;
   text-align: right;
+  padding-left: 10px;
   padding-right: 20px;
   overflow-y: auto;
   overflow: hidden;
@@ -87,12 +89,12 @@ body,
 }
 
 #terminal {
-  padding-left: 10px;
   width: 100%;
   height: 100%;
   float: left;
-  background-color: #1f1f1f;
+  background-color: var(--fundo);
   overflow: hidden;
+  padding-left: 40px;
 }
 
 #terminal *:focus {
