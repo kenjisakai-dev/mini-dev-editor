@@ -13,6 +13,7 @@ function configDefaultApp() {
     fontApp: "Source Code Pro",
     zoomApp: 1.2,
     editorTypeApp: "text",
+    editorNameApp: "Texto Simples",
   };
 }
 
@@ -21,8 +22,14 @@ function getConfigApp() {
 
   if (fs.existsSync(fileConfig)) {
     const readFile = fs.readFileSync(fileConfig, { encoding: "utf-8" });
-    const { themeApp, colorTextApp, fontApp, zoomApp, editorTypeApp } =
-      JSON.parse(readFile);
+    const {
+      themeApp,
+      colorTextApp,
+      fontApp,
+      zoomApp,
+      editorTypeApp,
+      editorNameApp,
+    } = JSON.parse(readFile);
 
     data = {
       themeApp: themeApp || data.themeApp,
@@ -30,6 +37,7 @@ function getConfigApp() {
       fontApp: fontApp || data.fontApp,
       zoomApp: zoomApp || data.zoomApp,
       editorTypeApp: editorTypeApp || data.editorTypeApp,
+      editorNameApp: editorNameApp || data.editorNameApp,
     };
   }
 
@@ -42,6 +50,7 @@ function saveConfigApp({
   fontApp,
   zoomApp,
   editorTypeApp,
+  editorNameApp,
 }) {
   const currentConfig = getConfigApp();
 
@@ -51,6 +60,7 @@ function saveConfigApp({
     fontApp: fontApp || currentConfig.fontApp,
     zoomApp: zoomApp || currentConfig.zoomApp,
     editorTypeApp: editorTypeApp || currentConfig.editorTypeApp,
+    editorNameApp: editorNameApp || currentConfig.editorNameApp,
   };
 
   fs.writeFileSync(fileConfig, JSON.stringify(data), { encoding: "utf-8" });
@@ -63,9 +73,11 @@ module.exports = {
   fontApp: () => getConfigApp().fontApp,
   zoomApp: () => getConfigApp().zoomApp,
   editorTypeApp: () => getConfigApp().editorTypeApp,
+  editorNameApp: () => getConfigApp().editorNameApp,
   themeAppDefault: () => configDefaultApp().themeApp,
   colorTextAppDefault: () => configDefaultApp().colorTextApp,
   fontAppDefault: () => configDefaultApp().fontApp,
   zoomAppDefault: () => configDefaultApp().zoomApp,
   editorTypeAppDefault: () => configDefaultApp().editorTypeApp,
+  editorNameAppDefault: () => configDefaultApp().editorNameApp,
 };

@@ -12,6 +12,7 @@ const {
   colorTextApp,
   zoomApp,
   editorTypeApp,
+  editorNameApp,
 } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
 
@@ -38,7 +39,10 @@ const createMainWindow = () => {
     win.webContents.send("set-theme", themeApp());
     win.webContents.send("set-color", colorTextApp());
     win.webContents.setZoomFactor(zoomApp());
-    win.webContents.send("set-editor-type", editorTypeApp());
+    win.webContents.send("set-editor-type", {
+      editorType: editorTypeApp(),
+      editorName: editorNameApp(),
+    });
   });
 
   win.on("close", (event) => {
@@ -55,37 +59,55 @@ const createMainWindow = () => {
   });
 
   ipcMain.on("terminal-input", (event, input) => {
-    const shell = spawn(
-      "powershell.exe",
-      [
+    let numericMessage = 0;
+    let shellArgs = [];
+    const shellName = editorNameApp();
+
+    if (shellName === "cmd.exe") {
+      shellArgs = ["/c", input];
+    } else {
+      shellArgs = [
         "-NoLogo",
         "-NoProfile",
         "-Command",
-        "[Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8;",
-        input,
-      ],
-      { encoding: "utf8" }
-    );
+        `[Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8; ${input}`,
+      ];
+    }
+    const shell = spawn(shellName, shellArgs, { encoding: "utf8" });
 
     shell.stdout.on("data", (data) => {
       win?.webContents.send("terminal-output", {
         finished: false,
         message: data.toString(),
+        editorName: editorNameApp(),
+        numericMessage,
       });
+
+      numericMessage++;
+      event.returnValue = "OK";
     });
 
     shell.stderr.on("data", (data) => {
       win?.webContents.send("terminal-output", {
         finished: false,
         message: data.toString(),
+        editorName: editorNameApp(),
+        numericMessage,
       });
+
+      numericMessage++;
+      event.returnValue = "OK";
     });
 
     shell.on("close", (code) => {
       win.webContents.send("terminal-output", {
         finished: true,
         message: `Processo finalizado: ${code}`,
+        editorName: editorNameApp(),
+        numericMessage,
       });
+
+      numericMessage = 0;
     });
   });
 };

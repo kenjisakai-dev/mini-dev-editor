@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("api", {
   setFont: (font) => ipcRenderer.on("set-font", font),
   setFile: (file) => ipcRenderer.on("set-file", file),
   updateContent: (content) => ipcRenderer.send("update-content", content),
-  setEditorType: (editorType) => ipcRenderer.on("set-editor-type", editorType),
+  setEditorType: (editor) => ipcRenderer.on("set-editor-type", editor),
 
   terminalInput: (input) => ipcRenderer.send("terminal-input", input),
   terminalOutput: (outputObject) =>

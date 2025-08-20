@@ -61,8 +61,6 @@ api.setFont((_event, font) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log(window.Terminal);
-  console.log(window.Terminal.prototype);
   const terminal = new window.Terminal({
     fontSize: 16,
     lineHeight: 1,
@@ -99,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
   terminal.prompt = () => {
     terminal.write("\r\n> ");
   };
-  terminal.prompt();
 
   let key = "";
   let command = "";
@@ -114,17 +111,29 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (printable) writeCommand();
   });
 
-  window.api.terminalOutput((event, { finished, message }) => {
-    terminal.write(message);
-    if (finished) {
-      terminal.write("\r\n");
-      terminal.prompt();
-    }
-  });
+  window.api.terminalOutput(
+    (event, { finished, message, editorName, numericMessage }) => {
+      console.log(finished, message, numericMessage);
 
-  function enterCommand() {
+      if (editorName === "cmd.exe") {
+        if (numericMessage === 0) message = "\r\n\r\n" + message;
+        if (finished) message = "\r\n" + message;
+      }
+
+      if (editorName === "pwsh.exe") {
+        if (numericMessage === 0) message = "\r\n" + message;
+      }
+
+      terminal.write(message);
+      if (finished) {
+        terminal.write("\r\n");
+        terminal.prompt();
+      }
+    }
+  );
+
+  async function enterCommand() {
     window.api.terminalInput(command);
-    terminal.write("\r\n");
     command = "";
   }
 
@@ -157,14 +166,17 @@ document.addEventListener("DOMContentLoaded", () => {
       background: cor,
     };
   });
-});
 
-api.setEditorType((_event, editorType) => {
-  if (editorType === "text") {
-    document.getElementById("txtEditor").style.display = "block";
-    document.getElementById("terminal").style.display = "none";
-  } else if (editorType === "terminal") {
-    document.getElementById("txtEditor").style.display = "none";
-    document.getElementById("terminal").style.display = "block";
-  }
+  api.setEditorType((_event, { editorType, editorName }) => {
+    if (editorType === "text") {
+      document.getElementById("txtEditor").style.display = "block";
+      document.getElementById("terminal").style.display = "none";
+    } else if (editorType === "terminal") {
+      document.getElementById("txtEditor").style.display = "none";
+      document.getElementById("terminal").style.display = "block";
+      command = "";
+      terminal.clear();
+      terminal.prompt();
+    }
+  });
 });

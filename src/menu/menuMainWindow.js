@@ -7,6 +7,7 @@ const {
   zoomApp,
   zoomAppDefault,
   editorTypeApp,
+  editorNameApp,
 } = require("../config/config");
 const { openFile, saveFile } = require("../service/contentFile");
 const { dialogNewFile, dialogConfirmExit } = require("./dialogFile");
@@ -35,16 +36,48 @@ const buildTemplateMenu = (win) => {
     submenu: [
       {
         label: "Texto",
+        type: "checkbox",
+        checked: editorNameApp() === "Texto Simples",
         click: () => {
-          setEditorType(win, "text");
+          setEditorType(win, "text", "Texto Simples");
           buildTemplateMenu(win);
+          win.webContents.reload();
         },
       },
       {
-        label: "Powershell",
+        label: "Powershell 5",
+        type: "checkbox",
+        checked: editorNameApp() === "powershell.exe",
         click: () => {
-          setEditorType(win, "terminal");
+          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+
+          setEditorType(win, "terminal", "powershell.exe");
           buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "Powershell 7",
+        type: "checkbox",
+        checked: editorNameApp() === "pwsh.exe",
+        click: () => {
+          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+
+          setEditorType(win, "terminal", "pwsh.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "CMD",
+        type: "checkbox",
+        checked: editorNameApp() === "cmd.exe",
+        click: () => {
+          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+
+          setEditorType(win, "terminal", "cmd.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
         },
       },
     ],
