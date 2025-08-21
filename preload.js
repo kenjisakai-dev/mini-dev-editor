@@ -11,4 +11,8 @@ contextBridge.exposeInMainWorld("api", {
   terminalInput: (input) => ipcRenderer.send("terminal-input", input),
   terminalOutput: (outputObject) =>
     ipcRenderer.on("terminal-output", outputObject),
+
+  getHistoryCommands: () => ipcRenderer.invoke("get-history-commands"),
+  appendHistoryCommand: (command) =>
+    ipcRenderer.send("append-history-command", command),
 });

@@ -15,6 +15,7 @@ const {
   editorNameApp,
 } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
+const { readCommands, appendCommand } = require("../config/historyCommands");
 
 let win;
 
@@ -109,6 +110,15 @@ const createMainWindow = () => {
 
       numericMessage = 0;
     });
+  });
+
+  ipcMain.handle("get-history-commands", (event) => {
+    const historyCommands = readCommands();
+    return historyCommands;
+  });
+
+  ipcMain.on("append-history-command", (event, command) => {
+    appendCommand(command);
   });
 };
 

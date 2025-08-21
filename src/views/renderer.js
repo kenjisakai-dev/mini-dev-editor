@@ -60,7 +60,7 @@ api.setFont((_event, font) => {
   area.style.fontFamily = font;
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const terminal = new window.Terminal({
     fontSize: 16,
     lineHeight: 1,
@@ -101,6 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let key = "";
   let command = "";
 
+  let historyCommands = await api.getHistoryCommands();
+  let historyIndex = historyCommands.length;
+
   terminal.onKey((event) => {
     const ev = event.domEvent;
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
@@ -108,13 +111,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (key === "Enter") enterCommand();
     else if (key === "Backspace") backspaceCommand();
+    else if (key === "ArrowUp") arrowUpCommand();
+    else if (key === "ArrowDown") arrowDownCommand();
     else if (printable) writeCommand();
   });
 
   window.api.terminalOutput(
     (event, { finished, message, editorName, numericMessage }) => {
-      console.log(finished, message, numericMessage);
-
       if (editorName === "cmd.exe") {
         if (numericMessage === 0) message = "\r\n\r\n" + message;
         if (finished) message = "\r\n" + message;
@@ -134,6 +137,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function enterCommand() {
     window.api.terminalInput(command);
+    await api.appendHistoryCommand(command);
+    historyCommands = await api.getHistoryCommands();
+    historyIndex = historyCommands.length;
     command = "";
   }
 
@@ -145,6 +151,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function writeCommand() {
     command += key;
     terminal.write(key);
+  }
+
+  function arrowUpCommand() {
+    if (historyCommands.length > 0 && historyIndex > 0) {
+      historyIndex--;
+      command = historyCommands[historyIndex] || "";
+      terminal.write("\x1b[2K\r> " + command);
+    }
+  }
+
+  function arrowDownCommand() {
+    if (
+      historyCommands.length > 0 &&
+      historyIndex < historyCommands.length - 1
+    ) {
+      historyIndex++;
+      command = historyCommands[historyIndex] || "";
+      terminal.write("\x1b[2K\r> " + command);
+    }
   }
 
   api.setColor((_event, color) => {
