@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let key = "";
   let command = "";
+  let commandIndex = 0;
 
   let historyCommands = await api.getHistoryCommands();
   let historyIndex = historyCommands.length;
@@ -111,8 +112,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (key === "Enter") enterCommand();
     else if (key === "Backspace") backspaceCommand();
+    else if (key === "Delete") deleteCommand();
     else if (key === "ArrowUp") arrowUpCommand();
     else if (key === "ArrowDown") arrowDownCommand();
+    else if (key === "ArrowLeft") arrowLeftCommand();
+    else if (key === "ArrowRight") arrowRightCommand();
     else if (printable) writeCommand();
   });
 
@@ -141,23 +145,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     historyCommands = await api.getHistoryCommands();
     historyIndex = historyCommands.length;
     command = "";
+    commandIndex = 0;
   }
 
   function backspaceCommand() {
-    terminal.write("\b \b");
-    command = command.slice(0, -1);
+    if (commandIndex > 0) {
+      command =
+        command.slice(0, commandIndex - 1) + command.slice(commandIndex);
+      commandIndex--;
+      terminal.write("\x1b[2K\r> " + command);
+      terminal.write(`\x1b[${commandIndex + 3}G`);
+    }
+  }
+
+  function deleteCommand() {
+    if (commandIndex < command.length) {
+      command =
+        command.slice(0, commandIndex) + command.slice(commandIndex + 1);
+      terminal.write("\x1b[2K\r> " + command);
+      terminal.write(`\x1b[${commandIndex + 3}G`);
+    }
   }
 
   function writeCommand() {
-    command += key;
-    terminal.write(key);
+    command =
+      command.slice(0, commandIndex) + key + command.slice(commandIndex);
+    commandIndex++;
+    terminal.write("\x1b[2K\r> " + command);
+    terminal.write(`\x1b[${commandIndex + 3}G`);
   }
 
   function arrowUpCommand() {
     if (historyCommands.length > 0 && historyIndex > 0) {
       historyIndex--;
       command = historyCommands[historyIndex] || "";
+      commandIndex = command.length;
       terminal.write("\x1b[2K\r> " + command);
+      terminal.write(`\x1b[${commandIndex + 3}G`);
     }
   }
 
@@ -168,7 +192,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     ) {
       historyIndex++;
       command = historyCommands[historyIndex] || "";
-      terminal.write("\x1b[2K\r> " + command);
+      commandIndex = command.length;
+      terminal.write(`\x1b[2K\r> ${command}`);
+      terminal.write(`\x1b[${commandIndex + 3}G`);
+    }
+  }
+
+  function arrowLeftCommand() {
+    if (commandIndex > 0) {
+      commandIndex--;
+      terminal.write("\x1b[1D");
+    }
+  }
+  function arrowRightCommand() {
+    if (commandIndex < command.length) {
+      commandIndex++;
+      terminal.write("\x1b[1C");
     }
   }
 
