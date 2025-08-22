@@ -94,6 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   terminal.loadAddon(fitAddon);
   fitAddon.fit();
 
+  window.addEventListener("resize", () => fitAddon.fit());
+
   terminal.prompt = () => {
     terminal.write("\r\n> ");
   };
@@ -101,6 +103,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   let key = "";
   let command = "";
   let commandIndex = 0;
+  const keysIgnore = [
+    "Tab",
+    "Escape",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "Insert",
+    "PageUp",
+    "PageDown",
+  ];
 
   let historyCommands = await api.getHistoryCommands();
   let historyIndex = historyCommands.length;
@@ -117,6 +138,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     else if (key === "ArrowDown") arrowDownCommand();
     else if (key === "ArrowLeft") arrowLeftCommand();
     else if (key === "ArrowRight") arrowRightCommand();
+    else if (key === "Home") homeCommand();
+    else if (key === "End") endCommand();
+    else if (keysIgnore.includes(key)) return;
     else if (printable) writeCommand();
   });
 
@@ -204,11 +228,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       terminal.write("\x1b[1D");
     }
   }
+
   function arrowRightCommand() {
     if (commandIndex < command.length) {
       commandIndex++;
       terminal.write("\x1b[1C");
     }
+  }
+
+  function homeCommand() {
+    commandIndex = 0;
+    terminal.write("\x1b[2K\r> " + command);
+    terminal.write("\x1b[3G");
+  }
+
+  function endCommand() {
+    commandIndex = command.length;
+    terminal.write("\x1b[2K\r> " + command);
+    terminal.write(`\x1b[${commandIndex + 3}G`);
   }
 
   api.setColor((_event, color) => {
