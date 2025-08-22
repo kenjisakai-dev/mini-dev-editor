@@ -109,15 +109,6 @@ const buildTemplateMenu = (win) => {
         click: () => saveFile(win, true),
         icon: getIconTheme("save-as-file"),
       },
-      {
-        type: "separator",
-      },
-      {
-        label: "Sair",
-        click: () => dialogConfirmExit(win),
-        accelerator: "Alt+F4",
-        icon: getIconTheme("quit-app"),
-      },
     ],
   });
   const menuEditor = new MenuItem({
