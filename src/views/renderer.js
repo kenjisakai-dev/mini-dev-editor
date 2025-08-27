@@ -272,12 +272,58 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (editorType === "text") {
       document.getElementById("txtEditor").style.display = "block";
       document.getElementById("terminal").style.display = "none";
+      document.getElementById("codeEditor").style.display = "none";
     } else if (editorType === "terminal") {
       document.getElementById("txtEditor").style.display = "none";
       document.getElementById("terminal").style.display = "block";
+      document.getElementById("codeEditor").style.display = "none";
       command = "";
       terminal.clear();
       terminal.prompt();
+    } else if (editorType === "code") {
+      document.getElementById("txtEditor").style.display = "none";
+      document.getElementById("terminal").style.display = "none";
+      document.getElementById("codeEditor").style.display = "block";
+      createCodeEditor();
     }
   });
 });
+
+function createCodeEditor() {
+  let codeEditor = document.getElementById("codeEditor");
+
+  var editor = CodeMirror(codeEditor, {
+    // value:
+    //   "// Digite seu código JavaScript aqui\nfunction hello() {\n  console.log('Olá, mundo!');\n}",
+    mode: "javascript",
+    theme: "material-darker",
+    lineNumbers: true,
+    autofocus: true,
+    tabSize: 2,
+    indentUnit: 2,
+    matchBrackets: true,
+    autoCloseBrackets: true,
+    styleActiveLine: false,
+  });
+
+  api.setThemeCode((_event, themeCode) => {
+    editor.setOption("theme", themeCode);
+  });
+
+  editor.setSize("100%", "100%");
+
+  codeEditor.addEventListener("keyup", () => {
+    api.updateContent(editor.getValue());
+  });
+
+  api.setFile((_event, fileContent) => {
+    if (fileContent.name === "") {
+      nomeArquivo.innerHTML = `Mini Dev Editor`;
+    } else {
+      nomeArquivo.innerHTML = `${fileContent.name} - Mini Dev Editor`;
+    }
+
+    editor.setValue(fileContent.content);
+    numerarLinhas();
+  });
+}

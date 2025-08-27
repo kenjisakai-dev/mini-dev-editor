@@ -8,15 +8,17 @@ const {
   zoomAppDefault,
   editorTypeApp,
   editorNameApp,
+  themeAppCode,
 } = require("../config/config");
 const { openFile, saveFile } = require("../service/contentFile");
-const { dialogNewFile, dialogConfirmExit } = require("./dialogFile");
+const { dialogNewFile } = require("./dialogFile");
 const { setThemeApp } = require("../config/theme");
 const { setColorTextApp } = require("../config/color");
 const { setFontApp } = require("../config/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
 const { setZoomApp } = require("../config/zoom");
 const { setEditorType } = require("../config/editor");
+const { setThemeAppCode } = require("../config/themeCode");
 
 const buildTemplateMenu = (win) => {
   const getIcon = (iconName) => {
@@ -39,6 +41,9 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "Texto Simples",
         click: () => {
+          if (editorNameApp() === "Texto Simples") return;
+          if (["javascript"].includes(editorNameApp())) dialogNewFile(win);
+
           setEditorType(win, "text", "Texto Simples");
           buildTemplateMenu(win);
           win.webContents.reload();
@@ -49,7 +54,8 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "powershell.exe",
         click: () => {
-          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+          if (["Texto Simples", "javascript"].includes(editorNameApp()))
+            dialogNewFile(win);
 
           setEditorType(win, "terminal", "powershell.exe");
           buildTemplateMenu(win);
@@ -61,7 +67,8 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "pwsh.exe",
         click: () => {
-          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+          if (["Texto Simples", "javascript"].includes(editorNameApp()))
+            dialogNewFile(win);
 
           setEditorType(win, "terminal", "pwsh.exe");
           buildTemplateMenu(win);
@@ -73,9 +80,22 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "cmd.exe",
         click: () => {
-          if (editorNameApp() === "Texto Simples") dialogNewFile(win);
+          if (["javascript"].includes(editorNameApp())) dialogNewFile(win);
 
           setEditorType(win, "terminal", "cmd.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "JavaScript",
+        type: "checkbox",
+        checked: editorNameApp() === "javascript",
+        click: () => {
+          if (editorNameApp() === "javascript") return;
+          if (["Texto Simples"].includes(editorNameApp())) dialogNewFile(win);
+
+          setEditorType(win, "code", "javascript");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
@@ -375,6 +395,66 @@ const buildTemplateMenu = (win) => {
       },
     ],
   });
+  const menuThemeCode = new MenuItem({
+    label: "Tema",
+    submenu: [
+      {
+        label: "Material Darker",
+        type: "checkbox",
+        checked: themeAppCode() === "material-darker",
+        click: () => {
+          setThemeAppCode(win, "material-darker");
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "Dracula",
+        type: "checkbox",
+        checked: themeAppCode() === "dracula",
+        click: () => {
+          setThemeAppCode(win, "dracula");
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "Monokai",
+        type: "checkbox",
+        checked: themeAppCode() === "monokai",
+        click: () => {
+          setThemeAppCode(win, "monokai");
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "Darcula",
+        type: "checkbox",
+        checked: themeAppCode() === "darcula",
+        click: () => {
+          setThemeAppCode(win, "darcula");
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "Solarized",
+        type: "checkbox",
+        checked: themeAppCode() === "solarized",
+        click: () => {
+          setThemeAppCode(win, "solarized");
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
+        label: "Restaurar Tema",
+        click: () => {
+          setThemeAppCode(win, "material-darker");
+          buildTemplateMenu(win);
+        },
+      },
+    ],
+  });
   const menuHelp = new MenuItem({
     label: "Ajuda",
     submenu: [
@@ -386,20 +466,33 @@ const buildTemplateMenu = (win) => {
     ],
   });
 
-  let index = 0;
-
-  templateMenu.insert(index++, menuType);
-
   if (editorTypeApp() === "text") {
-    templateMenu.insert(index++, menuFile);
-    templateMenu.insert(index++, menuEditor);
-    templateMenu.insert(index++, menuFont);
+    templateMenu.append(menuType);
+    templateMenu.append(menuFile);
+    templateMenu.append(menuEditor);
+    templateMenu.append(menuFont);
+    templateMenu.append(menuZoom);
+    templateMenu.append(menuColor);
+    templateMenu.append(menuTheme);
+    templateMenu.append(menuHelp);
   }
 
-  templateMenu.insert(index++, menuZoom);
-  templateMenu.insert(index++, menuColor);
-  templateMenu.insert(index++, menuTheme);
-  templateMenu.insert(index++, menuHelp);
+  if (editorTypeApp() === "terminal") {
+    templateMenu.append(menuType);
+    templateMenu.append(menuZoom);
+    templateMenu.append(menuColor);
+    templateMenu.append(menuTheme);
+    templateMenu.append(menuHelp);
+  }
+
+  if (editorTypeApp() === "code") {
+    templateMenu.append(menuType);
+    templateMenu.append(menuFile);
+    templateMenu.append(menuEditor);
+    templateMenu.append(menuZoom);
+    templateMenu.append(menuThemeCode);
+    templateMenu.append(menuHelp);
+  }
 
   Menu.setApplicationMenu(templateMenu);
 };

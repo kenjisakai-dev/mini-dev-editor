@@ -101,6 +101,16 @@ body,
   outline: none;
 }
 
+#codeEditor {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.CodeMirror {
+  font-size: 18px;
+}
+
 #sobre {
   width: 100%;
   height: 100%;

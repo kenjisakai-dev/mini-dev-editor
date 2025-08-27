@@ -15,4 +15,6 @@ contextBridge.exposeInMainWorld("api", {
   getHistoryCommands: () => ipcRenderer.invoke("get-history-commands"),
   appendHistoryCommand: (command) =>
     ipcRenderer.send("append-history-command", command),
+
+  setThemeCode: (themeCode) => ipcRenderer.on("set-theme-code", themeCode),
 });

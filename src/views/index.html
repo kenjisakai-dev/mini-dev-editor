@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="titulo">Mini Dev Editor</title>
 
-    <link
-      rel="stylesheet"
-      href="../../node_modules/@xterm/xterm/css/xterm.css"
-    />
+    <link rel="stylesheet" href="../lib/@xterm/xterm/css/xterm.css" />
+
+    <link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="../lib/codemirror/theme/material-darker.css" />
+    <link rel="stylesheet" href="../lib/codemirror/theme/dracula.css" />
+    <link rel="stylesheet" href="../lib/codemirror/theme/monokai.css" />
+    <link rel="stylesheet" href="../lib/codemirror/theme/darcula.css" />
+    <link rel="stylesheet" href="../lib/codemirror/theme/solarized.css" />
+
     <link rel="stylesheet" href="../public/css/style.css" />
 
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
@@ -20,10 +25,18 @@
         <textarea id="txtArea" spellcheck="false" wrap="off"></textarea>
       </div>
       <div id="terminal"></div>
+      <div id="codeEditor"></div>
     </div>
 
-    <script src="../../node_modules/@xterm/xterm/lib/xterm.js"></script>
-    <script src="../../node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="../lib/@xterm/xterm/lib/xterm.js"></script>
+    <script src="../lib/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+
+    <script src="../lib/codemirror/lib/codemirror.js"></script>
+    <script src="../lib/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="../lib/codemirror/addon/edit/closebrackets.js"></script>
+    <script src="../lib/codemirror/addon/selection/active-line.js"></script>
+    <script src="../lib/codemirror/mode/javascript/javascript.js"></script>
+
     <script src="renderer.js"></script>
   </body>
 </html>

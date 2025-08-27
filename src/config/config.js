@@ -9,6 +9,7 @@ const fileConfig = path.join(pathUserData, filename);
 function configDefaultApp() {
   return {
     themeApp: "system",
+    themeAppCode: "material-darker",
     colorTextApp: "cinzaClaro",
     fontApp: "Source Code Pro",
     zoomApp: 1.2,
@@ -24,6 +25,7 @@ function getConfigApp() {
     const readFile = fs.readFileSync(fileConfig, { encoding: "utf-8" });
     const {
       themeApp,
+      themeAppCode,
       colorTextApp,
       fontApp,
       zoomApp,
@@ -33,6 +35,7 @@ function getConfigApp() {
 
     data = {
       themeApp: themeApp || data.themeApp,
+      themeAppCode: themeAppCode || data.themeAppCode,
       colorTextApp: colorTextApp || data.colorTextApp,
       fontApp: fontApp || data.fontApp,
       zoomApp: zoomApp || data.zoomApp,
@@ -46,6 +49,7 @@ function getConfigApp() {
 
 function saveConfigApp({
   themeApp,
+  themeAppCode,
   colorTextApp,
   fontApp,
   zoomApp,
@@ -56,6 +60,7 @@ function saveConfigApp({
 
   const data = {
     themeApp: themeApp || currentConfig.themeApp,
+    themeAppCode: themeAppCode || currentConfig.themeAppCode,
     colorTextApp: colorTextApp || currentConfig.colorTextApp,
     fontApp: fontApp || currentConfig.fontApp,
     zoomApp: zoomApp || currentConfig.zoomApp,
@@ -69,12 +74,14 @@ function saveConfigApp({
 module.exports = {
   saveConfigApp,
   themeApp: () => getConfigApp().themeApp,
+  themeAppCode: () => getConfigApp().themeAppCode,
   colorTextApp: () => getConfigApp().colorTextApp,
   fontApp: () => getConfigApp().fontApp,
   zoomApp: () => getConfigApp().zoomApp,
   editorTypeApp: () => getConfigApp().editorTypeApp,
   editorNameApp: () => getConfigApp().editorNameApp,
   themeAppDefault: () => configDefaultApp().themeApp,
+  themeAppCodeDefault: () => configDefaultApp().themeAppCode,
   colorTextAppDefault: () => configDefaultApp().colorTextApp,
   fontAppDefault: () => configDefaultApp().fontApp,
   zoomAppDefault: () => configDefaultApp().zoomApp,

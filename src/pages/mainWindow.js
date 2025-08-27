@@ -13,6 +13,7 @@ const {
   zoomApp,
   editorTypeApp,
   editorNameApp,
+  themeAppCode,
 } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
 const { readCommands, appendCommand } = require("../config/historyCommands");
@@ -44,6 +45,7 @@ const createMainWindow = () => {
       editorType: editorTypeApp(),
       editorName: editorNameApp(),
     });
+    win.webContents.send("set-theme-code", themeAppCode());
   });
 
   win.on("close", (event) => {
