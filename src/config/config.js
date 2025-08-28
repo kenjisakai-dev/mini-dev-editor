@@ -13,8 +13,8 @@ function configDefaultApp() {
     colorTextApp: "cinzaClaro",
     fontApp: "Source Code Pro",
     zoomApp: 1.2,
-    editorTypeApp: "text",
-    editorNameApp: "Texto Simples",
+    editorTypeApp: "txt",
+    editorNameApp: "text",
   };
 }
 

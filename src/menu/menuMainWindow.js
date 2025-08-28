@@ -39,12 +39,12 @@ const buildTemplateMenu = (win) => {
       {
         label: "Texto",
         type: "checkbox",
-        checked: editorNameApp() === "Texto Simples",
+        checked: editorNameApp() === "text",
         click: () => {
-          if (editorNameApp() === "Texto Simples") return;
+          if (editorNameApp() === "text") return;
           if (["javascript"].includes(editorNameApp())) dialogNewFile(win);
 
-          setEditorType(win, "text", "Texto Simples");
+          setEditorType(win, "txt", "text");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
@@ -54,7 +54,7 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "powershell.exe",
         click: () => {
-          if (["Texto Simples", "javascript"].includes(editorNameApp()))
+          if (["text", "javascript"].includes(editorNameApp()))
             dialogNewFile(win);
 
           setEditorType(win, "terminal", "powershell.exe");
@@ -67,7 +67,7 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "pwsh.exe",
         click: () => {
-          if (["Texto Simples", "javascript"].includes(editorNameApp()))
+          if (["text", "javascript"].includes(editorNameApp()))
             dialogNewFile(win);
 
           setEditorType(win, "terminal", "pwsh.exe");
@@ -93,7 +93,7 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "javascript",
         click: () => {
           if (editorNameApp() === "javascript") return;
-          if (["Texto Simples"].includes(editorNameApp())) dialogNewFile(win);
+          if (["text"].includes(editorNameApp())) dialogNewFile(win);
 
           setEditorType(win, "code", "javascript");
           buildTemplateMenu(win);
@@ -466,7 +466,7 @@ const buildTemplateMenu = (win) => {
     ],
   });
 
-  if (editorTypeApp() === "text") {
+  if (editorTypeApp() === "txt") {
     templateMenu.append(menuType);
     templateMenu.append(menuFile);
     templateMenu.append(menuEditor);

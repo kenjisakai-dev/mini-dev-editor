@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   api.setEditorType((_event, { editorType, editorName }) => {
-    if (editorType === "text") {
+    if (editorType === "txt") {
       document.getElementById("txtEditor").style.display = "block";
       document.getElementById("terminal").style.display = "none";
       document.getElementById("codeEditor").style.display = "none";

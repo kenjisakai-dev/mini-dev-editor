@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const { app, dialog, ipcMain } = require("electron");
+const { editorNameApp } = require("../config/config");
 
 let fileContent = {};
 
@@ -46,20 +47,29 @@ async function saveFile(win, salvarComo) {
   try {
     let filePath = fileContent.path;
 
+    let filters = [
+      {
+        name: "JavaScript",
+        extensions: ["js"],
+        editorName: "javascript",
+      },
+      {
+        name: "Arquivos de Texto",
+        extensions: ["txt"],
+        editorName: "text",
+      },
+      {
+        name: "Todos os arquivos",
+        extensions: ["*"],
+        editorName: "text",
+      },
+    ].filter((item) => item.editorName === editorNameApp());
+
     if (salvarComo || !fileContent.saved) {
       const dialogFile = await dialog.showSaveDialog({
         title: "Salvar arquivo",
         defaultPath: filePath || app.getPath("desktop"),
-        filters: [
-          {
-            name: "Arquivos de Texto",
-            extensions: ["txt"],
-          },
-          {
-            name: "Todos os arquivos",
-            extensions: ["*"],
-          },
-        ],
+        filters: filters,
       });
 
       if (dialogFile.canceled) return false;
