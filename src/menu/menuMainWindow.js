@@ -42,12 +42,16 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text",
         click: () => {
           if (editorNameApp() === "text") return;
-          if (["javascript"].includes(editorNameApp())) dialogNewFile(win);
+          if (["javascript", "python"].includes(editorNameApp()))
+            dialogNewFile(win);
 
           setEditorType(win, "txt", "text");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
+      },
+      {
+        type: "separator",
       },
       {
         label: "Powershell 5",
@@ -88,14 +92,31 @@ const buildTemplateMenu = (win) => {
         },
       },
       {
+        type: "separator",
+      },
+      {
         label: "JavaScript",
         type: "checkbox",
         checked: editorNameApp() === "javascript",
         click: () => {
           if (editorNameApp() === "javascript") return;
-          if (["text"].includes(editorNameApp())) dialogNewFile(win);
+          if (["text", "python"].includes(editorNameApp())) dialogNewFile(win);
 
           setEditorType(win, "code", "javascript");
+          buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "Python",
+        type: "checkbox",
+        checked: editorNameApp() === "python",
+        click: () => {
+          if (editorNameApp() === "python") return;
+          if (["text", "javascript"].includes(editorNameApp()))
+            dialogNewFile(win);
+
+          setEditorType(win, "code", "python");
           buildTemplateMenu(win);
           win.webContents.reload();
         },

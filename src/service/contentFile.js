@@ -54,6 +54,11 @@ async function saveFile(win, salvarComo) {
         editorName: "javascript",
       },
       {
+        name: "Python",
+        extensions: ["py"],
+        editorName: "python",
+      },
+      {
         name: "Arquivos de Texto",
         extensions: ["txt"],
         editorName: "text",

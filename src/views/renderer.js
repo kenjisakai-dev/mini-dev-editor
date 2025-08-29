@@ -284,18 +284,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("txtEditor").style.display = "none";
       document.getElementById("terminal").style.display = "none";
       document.getElementById("codeEditor").style.display = "block";
-      createCodeEditor();
+      createCodeEditor(editorName);
     }
   });
 });
 
-function createCodeEditor() {
+function createCodeEditor(editorName) {
   let codeEditor = document.getElementById("codeEditor");
 
   var editor = CodeMirror(codeEditor, {
-    // value:
-    //   "// Digite seu código JavaScript aqui\nfunction hello() {\n  console.log('Olá, mundo!');\n}",
-    mode: "javascript",
+    mode: editorName,
     theme: "material-darker",
     lineNumbers: true,
     autofocus: true,
