@@ -19,18 +19,43 @@ function newFile(win) {
 
 async function openFile(win) {
   try {
+    const filters = [
+      {
+        name: "JavaScript",
+        extensions: ["js"],
+        editorName: "javascript",
+      },
+      {
+        name: "Python",
+        extensions: ["py"],
+        editorName: "python",
+      },
+      {
+        name: "Arquivos de Texto",
+        extensions: ["txt"],
+        editorName: "text",
+      },
+      {
+        name: "Todos os arquivos",
+        extensions: ["*"],
+        editorName: "text",
+      },
+    ].filter((item) => item.editorName === editorNameApp());
+
     const dialogFile = await dialog.showOpenDialog({
       title: "Abrir arquivo",
       properties: ["openFile"],
+      filters: filters,
     });
 
     if (dialogFile.canceled) return false;
 
     const filePath = dialogFile.filePaths[0];
     const content = fs.readFileSync(filePath, { encoding: "utf-8" });
+    const filename = path.basename(filePath);
 
     fileContent = {
-      name: path.basename(filePath),
+      name: filename,
       content: content,
       saved: true,
       currentSaved: true,
