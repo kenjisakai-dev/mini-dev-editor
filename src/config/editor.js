@@ -1,6 +1,6 @@
 const { saveConfigApp } = require("./config");
 
-const setEditorType = (win, editorType, editorName) => {
+const setEditorType = async (win, editorType, editorName) => {
   try {
     win.webContents.send("set-editor-type", { editorType, editorName });
     saveConfigApp({ editorTypeApp: editorType, editorNameApp: editorName });

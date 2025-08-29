@@ -6,7 +6,7 @@ const dialogNewFile = async (win) => {
     const dialogConfirm = await dialogConfirmSave("Deseja salvar o conteúdo ?");
 
     if (dialogConfirm.response === 0) {
-      const fileSaved = await saveFile(win, fileContent().saved);
+      const fileSaved = await saveFile(win, !fileContent().saved);
 
       if (!fileSaved) return;
     }

@@ -40,14 +40,14 @@ const buildTemplateMenu = (win) => {
         label: "Texto",
         type: "checkbox",
         checked: editorNameApp() === "text",
-        click: () => {
-          if (editorNameApp() === "text") return;
-          if (["javascript", "python"].includes(editorNameApp()))
-            dialogNewFile(win);
+        click: async () => {
+          if (["javascript", "python"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "txt", "text");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "txt", "text");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
@@ -57,38 +57,42 @@ const buildTemplateMenu = (win) => {
         label: "Powershell 5",
         type: "checkbox",
         checked: editorNameApp() === "powershell.exe",
-        click: () => {
-          if (["text", "javascript"].includes(editorNameApp()))
-            dialogNewFile(win);
+        click: async () => {
+          if (["text", "javascript"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "terminal", "powershell.exe");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "terminal", "powershell.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
         label: "Powershell 7",
         type: "checkbox",
         checked: editorNameApp() === "pwsh.exe",
-        click: () => {
-          if (["text", "javascript"].includes(editorNameApp()))
-            dialogNewFile(win);
+        click: async () => {
+          if (["text", "javascript"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "terminal", "pwsh.exe");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "terminal", "pwsh.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
         label: "CMD",
         type: "checkbox",
         checked: editorNameApp() === "cmd.exe",
-        click: () => {
-          if (["javascript"].includes(editorNameApp())) dialogNewFile(win);
+        click: async () => {
+          if (["javascript"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "terminal", "cmd.exe");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "terminal", "cmd.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
@@ -98,27 +102,28 @@ const buildTemplateMenu = (win) => {
         label: "JavaScript",
         type: "checkbox",
         checked: editorNameApp() === "javascript",
-        click: () => {
-          if (editorNameApp() === "javascript") return;
-          if (["text", "python"].includes(editorNameApp())) dialogNewFile(win);
+        click: async () => {
+          if (["text", "python"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "code", "javascript");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "code", "javascript");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
         label: "Python",
         type: "checkbox",
         checked: editorNameApp() === "python",
-        click: () => {
-          if (editorNameApp() === "python") return;
-          if (["text", "javascript"].includes(editorNameApp()))
-            dialogNewFile(win);
+        click: async () => {
+          if (["text", "javascript"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+            await setEditorType(win, "code", "python");
+            win.webContents.reload();
+          }
 
-          setEditorType(win, "code", "python");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
     ],
