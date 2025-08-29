@@ -41,54 +41,12 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "text",
         click: async () => {
-          if (["javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
+          if (editorNameApp() !== "text") {
+            if (editorTypeApp() === "code") {
+              await dialogNewFile(win);
+            }
+
             await setEditorType(win, "txt", "text");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Powershell 5",
-        type: "checkbox",
-        checked: editorNameApp() === "powershell.exe",
-        click: async () => {
-          if (["text", "javascript"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-            await setEditorType(win, "terminal", "powershell.exe");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Powershell 7",
-        type: "checkbox",
-        checked: editorNameApp() === "pwsh.exe",
-        click: async () => {
-          if (["text", "javascript"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-            await setEditorType(win, "terminal", "pwsh.exe");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "CMD",
-        type: "checkbox",
-        checked: editorNameApp() === "cmd.exe",
-        click: async () => {
-          if (["javascript"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-            await setEditorType(win, "terminal", "cmd.exe");
             win.webContents.reload();
           }
 
@@ -103,8 +61,11 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "javascript",
         click: async () => {
-          if (["text", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
+          if (editorNameApp() !== "javascript") {
+            if (["text", "python"].includes(editorNameApp())) {
+              await dialogNewFile(win);
+            }
+
             await setEditorType(win, "code", "javascript");
             win.webContents.reload();
           }
@@ -117,13 +78,61 @@ const buildTemplateMenu = (win) => {
         type: "checkbox",
         checked: editorNameApp() === "python",
         click: async () => {
-          if (["text", "javascript"].includes(editorNameApp())) {
-            await dialogNewFile(win);
+          if (editorNameApp() !== "python") {
+            if (["text", "javascript"].includes(editorNameApp())) {
+              await dialogNewFile(win);
+            }
+
             await setEditorType(win, "code", "python");
             win.webContents.reload();
           }
 
           buildTemplateMenu(win);
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
+        label: "Powershell 5",
+        type: "checkbox",
+        checked: editorNameApp() === "powershell.exe",
+        click: async () => {
+          if (["text", "javascript", "python"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+          }
+
+          await setEditorType(win, "terminal", "powershell.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "Powershell 7",
+        type: "checkbox",
+        checked: editorNameApp() === "pwsh.exe",
+        click: async () => {
+          if (["text", "javascript", "python"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+          }
+
+          await setEditorType(win, "terminal", "pwsh.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
+        },
+      },
+      {
+        label: "CMD",
+        type: "checkbox",
+        checked: editorNameApp() === "cmd.exe",
+        click: async () => {
+          if (["text", "javascript", "python"].includes(editorNameApp())) {
+            await dialogNewFile(win);
+          }
+
+          await setEditorType(win, "terminal", "cmd.exe");
+          buildTemplateMenu(win);
+          win.webContents.reload();
         },
       },
     ],

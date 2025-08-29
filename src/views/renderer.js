@@ -269,24 +269,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   api.setEditorType((_event, { editorType, editorName }) => {
-    if (editorType === "txt") {
-      document.getElementById("txtEditor").style.display = "block";
-      document.getElementById("terminal").style.display = "none";
-      document.getElementById("codeEditor").style.display = "none";
-    } else if (editorType === "terminal") {
-      document.getElementById("txtEditor").style.display = "none";
-      document.getElementById("terminal").style.display = "block";
-      document.getElementById("codeEditor").style.display = "none";
-      command = "";
-      terminal.clear();
-      terminal.prompt();
-    } else if (editorType === "code") {
-      document.getElementById("txtEditor").style.display = "none";
-      document.getElementById("terminal").style.display = "none";
-      document.getElementById("codeEditor").style.display = "block";
-      createCodeEditor(editorName);
-    }
+    command = "";
+    terminal.clear();
+    terminal.prompt();
   });
+});
+
+api.setEditorType((_event, { editorType, editorName }) => {
+  if (editorType === "txt") {
+    document.getElementById("txtEditor").style.display = "block";
+    document.getElementById("terminal").style.display = "none";
+    document.getElementById("codeEditor").style.display = "none";
+  } else if (editorType === "terminal") {
+    document.getElementById("txtEditor").style.display = "none";
+    document.getElementById("terminal").style.display = "block";
+    document.getElementById("codeEditor").style.display = "none";
+  } else if (editorType === "code") {
+    document.getElementById("txtEditor").style.display = "none";
+    document.getElementById("terminal").style.display = "none";
+    document.getElementById("codeEditor").style.display = "block";
+    createCodeEditor(editorName);
+  }
 });
 
 function createCodeEditor(editorName) {
