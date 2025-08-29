@@ -62,11 +62,36 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "javascript",
         click: async () => {
           if (editorNameApp() !== "javascript") {
-            if (["text", "python"].includes(editorNameApp())) {
+            if (
+              ["text", "text/typescript", "python", "text/x-csharp"].includes(
+                editorNameApp()
+              )
+            ) {
               await dialogNewFile(win);
             }
 
             await setEditorType(win, "code", "javascript");
+            win.webContents.reload();
+          }
+
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "TypeScript",
+        type: "checkbox",
+        checked: editorNameApp() === "text/typescript",
+        click: async () => {
+          if (editorNameApp() !== "text/typescript") {
+            if (
+              ["text", "javascript", "python", "text/x-csharp"].includes(
+                editorNameApp()
+              )
+            ) {
+              await dialogNewFile(win);
+            }
+
+            await setEditorType(win, "code", "text/typescript");
             win.webContents.reload();
           }
 
@@ -79,11 +104,39 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "python",
         click: async () => {
           if (editorNameApp() !== "python") {
-            if (["text", "javascript"].includes(editorNameApp())) {
+            if (
+              [
+                "text",
+                "javascript",
+                "text/typescript",
+                "text/x-csharp",
+              ].includes(editorNameApp())
+            ) {
               await dialogNewFile(win);
             }
 
             await setEditorType(win, "code", "python");
+            win.webContents.reload();
+          }
+
+          buildTemplateMenu(win);
+        },
+      },
+      {
+        label: "C#",
+        type: "checkbox",
+        checked: editorNameApp() === "text/x-csharp",
+        click: async () => {
+          if (editorNameApp() !== "text/x-csharp") {
+            if (
+              ["text", "javascript", "text/typescript", "python"].includes(
+                editorNameApp()
+              )
+            ) {
+              await dialogNewFile(win);
+            }
+
+            await setEditorType(win, "code", "text/x-csharp");
             win.webContents.reload();
           }
 

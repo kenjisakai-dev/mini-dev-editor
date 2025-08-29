@@ -26,9 +26,19 @@ async function openFile(win) {
         editorName: "javascript",
       },
       {
+        name: "TypeScript",
+        extensions: ["ts"],
+        editorName: "text/typescript",
+      },
+      {
         name: "Python",
         extensions: ["py"],
         editorName: "python",
+      },
+      {
+        name: "C#",
+        extensions: ["cs"],
+        editorName: "text/x-csharp",
       },
       {
         name: "Arquivos de Texto",
@@ -79,9 +89,19 @@ async function saveFile(win, salvarComo) {
         editorName: "javascript",
       },
       {
+        name: "TypeScript",
+        extensions: ["ts"],
+        editorName: "text/typescript",
+      },
+      {
         name: "Python",
         extensions: ["py"],
         editorName: "python",
+      },
+      {
+        name: "C#",
+        extensions: ["cs"],
+        editorName: "text/x-csharp",
       },
       {
         name: "Arquivos de Texto",
