@@ -19,43 +19,10 @@ function newFile(win) {
 
 async function openFile(win) {
   try {
-    const filters = [
-      {
-        name: "JavaScript",
-        extensions: ["js"],
-        editorName: "javascript",
-      },
-      {
-        name: "TypeScript",
-        extensions: ["ts"],
-        editorName: "text/typescript",
-      },
-      {
-        name: "Python",
-        extensions: ["py"],
-        editorName: "python",
-      },
-      {
-        name: "C#",
-        extensions: ["cs"],
-        editorName: "text/x-csharp",
-      },
-      {
-        name: "Arquivos de Texto",
-        extensions: ["txt"],
-        editorName: "text",
-      },
-      {
-        name: "Todos os arquivos",
-        extensions: ["*"],
-        editorName: "text",
-      },
-    ].filter((item) => item.editorName === editorNameApp());
-
     const dialogFile = await dialog.showOpenDialog({
       title: "Abrir arquivo",
       properties: ["openFile"],
-      filters: filters,
+      filters: getExtensions(),
     });
 
     if (dialogFile.canceled) return false;
@@ -82,44 +49,11 @@ async function saveFile(win, salvarComo) {
   try {
     let filePath = fileContent.path;
 
-    let filters = [
-      {
-        name: "JavaScript",
-        extensions: ["js"],
-        editorName: "javascript",
-      },
-      {
-        name: "TypeScript",
-        extensions: ["ts"],
-        editorName: "text/typescript",
-      },
-      {
-        name: "Python",
-        extensions: ["py"],
-        editorName: "python",
-      },
-      {
-        name: "C#",
-        extensions: ["cs"],
-        editorName: "text/x-csharp",
-      },
-      {
-        name: "Arquivos de Texto",
-        extensions: ["txt"],
-        editorName: "text",
-      },
-      {
-        name: "Todos os arquivos",
-        extensions: ["*"],
-        editorName: "text",
-      },
-    ].filter((item) => item.editorName === editorNameApp());
-
     if (salvarComo || !fileContent.saved) {
       const dialogFile = await dialog.showSaveDialog({
         title: "Salvar arquivo",
         defaultPath: filePath || app.getPath("desktop"),
-        filters: filters,
+        filters: getExtensions(),
       });
 
       if (dialogFile.canceled) return false;
@@ -142,6 +76,41 @@ async function saveFile(win, salvarComo) {
   } catch (err) {
     console.log(err?.message);
   }
+}
+
+function getExtensions() {
+  return [
+    {
+      name: "JavaScript",
+      extensions: ["js"],
+      editorName: "javascript",
+    },
+    {
+      name: "TypeScript",
+      extensions: ["ts"],
+      editorName: "text/typescript",
+    },
+    {
+      name: "Python",
+      extensions: ["py"],
+      editorName: "python",
+    },
+    {
+      name: "C#",
+      extensions: ["cs"],
+      editorName: "text/x-csharp",
+    },
+    {
+      name: "Arquivos de Texto",
+      extensions: ["txt"],
+      editorName: "text",
+    },
+    {
+      name: "Todos os arquivos",
+      extensions: ["*"],
+      editorName: "text",
+    },
+  ].filter((item) => item.editorName === editorNameApp());
 }
 
 ipcMain.on("update-content", (_event, content) => {

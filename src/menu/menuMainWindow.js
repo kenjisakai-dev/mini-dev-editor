@@ -10,7 +10,7 @@ const {
   editorNameApp,
   themeAppCode,
 } = require("../config/config");
-const { openFile, saveFile } = require("../service/contentFile");
+const { openFile, saveFile } = require("../helpers/contentFile");
 const { dialogNewFile } = require("./dialogFile");
 const { setThemeApp } = require("../config/theme");
 const { setColorTextApp } = require("../config/color");

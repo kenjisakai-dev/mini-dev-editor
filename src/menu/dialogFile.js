@@ -1,5 +1,5 @@
 const { dialog } = require("electron");
-const { fileContent, saveFile, newFile } = require("../service/contentFile");
+const { fileContent, saveFile, newFile } = require("../helpers/contentFile");
 
 const dialogNewFile = async (win) => {
   if (fileContent().content !== "" && fileContent().currentSaved === false) {
