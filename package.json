@@ -10,6 +10,5 @@
   "description": "Editor Dev",
   "devDependencies": {
     "electron": "^37.0.0"
-  },
-  "dependencies": {}
+  }
 }
