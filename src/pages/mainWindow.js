@@ -8,6 +8,7 @@ const {
   editorTypeApp,
   editorNameApp,
   themeAppCode,
+  loadConfigApp,
 } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
 const ipcMainEventsTerminal = require("../helpers/terminal");
@@ -15,7 +16,7 @@ const shortcuts = require("../helpers/shortcuts");
 
 let win;
 
-const createMainWindow = () => {
+const createMainWindow = async () => {
   win = new BrowserWindow({
     width: 1010,
     height: 720,
@@ -25,6 +26,7 @@ const createMainWindow = () => {
     },
   });
 
+  await loadConfigApp();
   nativeTheme.themeSource = themeApp();
   buildTemplateMenu(win);
 
