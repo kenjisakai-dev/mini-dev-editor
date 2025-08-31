@@ -2,10 +2,6 @@ const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
-const pathUserData = app.getPath("userData");
-const filename = "mini-dev-editor-config.json";
-const fileConfig = path.join(pathUserData, filename);
-
 let configCache = {
   themeApp: "system",
   themeAppCode: "material-darker",
@@ -16,7 +12,16 @@ let configCache = {
   editorNameApp: "text",
 };
 
+function getFilepath() {
+  const pathUserData = app.getPath("userData");
+  const filename = "mini-dev-editor-config.json";
+  const fileConfig = path.join(pathUserData, filename);
+  return fileConfig;
+}
+
 async function loadConfigApp() {
+  const fileConfig = getFilepath();
+
   if (fs.existsSync(fileConfig)) {
     const readFile = fs.readFileSync(fileConfig, { encoding: "utf-8" });
     configCache = JSON.parse(readFile);
@@ -44,6 +49,7 @@ function saveConfigApp({
     editorNameApp: editorNameApp || configCache.editorNameApp,
   };
 
+  const fileConfig = getFilepath();
   fs.writeFileSync(fileConfig, JSON.stringify(configCache), {
     encoding: "utf-8",
   });

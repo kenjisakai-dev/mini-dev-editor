@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "jest"
   },
   "author": "Kenji Sakai",
   "license": "MIT",
   "description": "Editor Dev",
   "devDependencies": {
-    "electron": "^37.0.0"
+    "electron": "^37.0.0",
+    "jest": "^30.1.1"
   }
 }
