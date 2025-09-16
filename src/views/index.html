@@ -5,18 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="titulo">Mini Dev Editor</title>
 
-    <link rel="stylesheet" href="../lib/@xterm/xterm/css/xterm.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css"
+    />
 
-    <link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css" />
-    <link rel="stylesheet" href="../lib/codemirror/theme/material-darker.css" />
-    <link rel="stylesheet" href="../lib/codemirror/theme/dracula.css" />
-    <link rel="stylesheet" href="../lib/codemirror/theme/monokai.css" />
-    <link rel="stylesheet" href="../lib/codemirror/theme/darcula.css" />
-    <link rel="stylesheet" href="../lib/codemirror/theme/solarized.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/lib/codemirror.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/material-darker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/dracula.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/monokai.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/darcula.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/solarized.css"
+    />
 
     <link rel="stylesheet" href="../public/css/style.css" />
 
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      script-src 'self' https://cdn.jsdelivr.net; 
+      style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;"
+    />
   </head>
   <body>
     <div id="container">
@@ -28,16 +54,16 @@
       <div id="codeEditor"></div>
     </div>
 
-    <script src="../lib/@xterm/xterm/lib/xterm.js"></script>
-    <script src="../lib/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
 
-    <script src="../lib/codemirror/lib/codemirror.js"></script>
-    <script src="../lib/codemirror/addon/edit/matchbrackets.js"></script>
-    <script src="../lib/codemirror/addon/edit/closebrackets.js"></script>
-    <script src="../lib/codemirror/addon/selection/active-line.js"></script>
-    <script src="../lib/codemirror/mode/javascript/javascript.js"></script>
-    <script src="../lib/codemirror/mode/python/python.js"></script>
-    <script src="../lib/codemirror/mode/clike/clike.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/edit/matchbrackets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/edit/closebrackets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/selection/active-line.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/python/python.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/clike/clike.js"></script>
 
     <script src="renderer.js"></script>
     <script src="editorText.js"></script>
