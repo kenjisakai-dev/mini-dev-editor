@@ -8,7 +8,7 @@ const {
   editorTypeApp,
   editorNameApp,
   themeAppCode,
-  loadConfigApp,
+  fontApp,
 } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
 const ipcMainEventsTerminal = require("../helpers/terminal");
@@ -26,7 +26,6 @@ const createMainWindow = async () => {
     },
   });
 
-  await loadConfigApp();
   nativeTheme.themeSource = themeApp();
   buildTemplateMenu(win);
 
@@ -41,6 +40,7 @@ const createMainWindow = async () => {
       editorName: editorNameApp(),
     });
     win.webContents.send("set-theme-code", themeAppCode());
+    win.webContents.send("set-font", fontApp());
   });
 
   win.on("close", (event) => {

@@ -1,8 +1,8 @@
-const { saveConfigApp } = require("./config");
+const { store } = require("./store");
 
 const setZoomApp = (zoomCurrent) => {
   try {
-    saveConfigApp({ zoomApp: zoomCurrent });
+    store.set("preferences.zoomApp", zoomCurrent);
   } catch (err) {
     console.error(`Erro ao mudar zoom: ${err?.message}`);
   }

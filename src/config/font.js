@@ -1,9 +1,9 @@
-const { saveConfigApp } = require("./config");
+const { store } = require("./store");
 
 const setFontApp = (win, fontSelected) => {
   try {
     win.webContents.send("set-font", fontSelected);
-    saveConfigApp({ fontApp: fontSelected });
+    store.set("preferences.fontApp", fontSelected);
   } catch (err) {
     console.error(`Erro ao mudar fonte: ${err?.message}`);
   }

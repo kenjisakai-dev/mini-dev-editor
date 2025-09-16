@@ -1,70 +1,12 @@
-const { app } = require("electron");
-const path = require("path");
-const fs = require("fs");
-
-let configCache = {
-  themeApp: "system",
-  themeAppCode: "material-darker",
-  colorTextApp: "cinzaClaro",
-  fontApp: "Source Code Pro",
-  zoomApp: 1.2,
-  editorTypeApp: "txt",
-  editorNameApp: "text",
-};
-
-function getFilepath() {
-  const pathUserData = app.getPath("userData");
-  const filename = "mini-dev-editor-config.json";
-  const fileConfig = path.join(pathUserData, filename);
-  return fileConfig;
-}
-
-async function loadConfigApp() {
-  const fileConfig = getFilepath();
-
-  if (fs.existsSync(fileConfig)) {
-    const readFile = fs.readFileSync(fileConfig, { encoding: "utf-8" });
-    configCache = JSON.parse(readFile);
-  }
-
-  return configCache;
-}
-
-function saveConfigApp({
-  themeApp,
-  themeAppCode,
-  colorTextApp,
-  fontApp,
-  zoomApp,
-  editorTypeApp,
-  editorNameApp,
-}) {
-  configCache = {
-    themeApp: themeApp || configCache.themeApp,
-    themeAppCode: themeAppCode || configCache.themeAppCode,
-    colorTextApp: colorTextApp || configCache.colorTextApp,
-    fontApp: fontApp || configCache.fontApp,
-    zoomApp: zoomApp || configCache.zoomApp,
-    editorTypeApp: editorTypeApp || configCache.editorTypeApp,
-    editorNameApp: editorNameApp || configCache.editorNameApp,
-  };
-
-  const fileConfig = getFilepath();
-  fs.writeFileSync(fileConfig, JSON.stringify(configCache), {
-    encoding: "utf-8",
-  });
-}
+const { store } = require("./store");
 
 module.exports = {
-  loadConfigApp,
-  saveConfigApp,
-
-  themeApp: () => configCache.themeApp,
-  themeAppCode: () => configCache.themeAppCode,
-  colorTextApp: () => configCache.colorTextApp,
-  fontApp: () => configCache.fontApp,
-  zoomApp: () => configCache.zoomApp,
-  zoomAppDefault: () => 1.2,
-  editorTypeApp: () => configCache.editorTypeApp,
-  editorNameApp: () => configCache.editorNameApp,
+  themeApp: () => store.get("preferences.themeApp"),
+  themeAppCode: () => store.get("preferences.themeAppCode"),
+  colorTextApp: () => store.get("preferences.colorTextApp"),
+  fontApp: () => store.get("preferences.fontApp"),
+  zoomApp: () => store.get("preferences.zoomApp"),
+  zoomAppDefault: () => store.get("preferences.zoomAppDefault"),
+  editorTypeApp: () => store.get("preferences.editorTypeApp"),
+  editorNameApp: () => store.get("preferences.editorNameApp"),
 };
