@@ -1,25 +1,5 @@
 @charset "utf-8";
 
-@font-face {
-  font-family: "Source Code Pro";
-  src: url("../fonts/sourceCodePro/SourceSans3-Italic-VariableFont_wght.ttf")
-      format("truetype"),
-    url("../fonts/sourceCodePro/SourceSans3-VariableFont_wght.ttf")
-      format("truetype");
-}
-
-@font-face {
-  font-family: "Inter";
-  src: url("../fonts/inter/Inter-Italic-VariableFont_opsz\,wght.ttf")
-      format("truetype"),
-    url("../fonts/inter/Inter-VariableFont_opsz\,wght.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Bebas Neue";
-  src: url("../fonts/bebasNeue/BebasNeue-Regular.ttf") format("truetype");
-}
-
 :root {
   --fundo: #1f1f1f;
   --branco: #fff;
