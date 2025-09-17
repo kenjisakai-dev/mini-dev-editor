@@ -1,5 +1,5 @@
 const { nativeTheme } = require("electron");
-const { colorTextApp } = require("./config");
+const { colorTextApp } = require("../config/config");
 const { store } = require("./store");
 
 const setThemeApp = (win, themeSelected) => {

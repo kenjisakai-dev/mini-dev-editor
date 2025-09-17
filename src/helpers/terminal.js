@@ -1,7 +1,7 @@
 const { ipcMain } = require("electron");
 const { spawn } = require("child_process");
 const { editorNameApp } = require("../config/config");
-const { readCommands, appendCommand } = require("../config/historyCommands");
+const { readCommands, appendCommand } = require("../helpers/historyCommands");
 
 module.exports = (win) => {
   ipcMain.on("terminal-input", (event, input) => {

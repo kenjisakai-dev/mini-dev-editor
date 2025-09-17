@@ -1,11 +1,17 @@
-const { globalShortcut } = require("electron");
+const { globalShortcut, app } = require("electron");
 
 module.exports = (win) => {
-  globalShortcut.register("CommandOrControl+I", () => {
-    win.webContents.toggleDevTools();
+  app.on("browser-window-focus", () => {
+    globalShortcut.register("CommandOrControl+I", () => {
+      win.webContents.toggleDevTools();
+    });
+
+    globalShortcut.register("CommandOrControl+R", () => {
+      win.webContents.reload();
+    });
   });
 
-  globalShortcut.register("CommandOrControl+R", () => {
-    win.webContents.reload();
+  app.on("browser-window-blur", () => {
+    globalShortcut.unregisterAll();
   });
 };

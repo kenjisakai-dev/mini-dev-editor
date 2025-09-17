@@ -12,13 +12,13 @@ const {
 } = require("../config/config");
 const { openFile, saveFile } = require("../helpers/contentFile");
 const { dialogNewFile } = require("./dialogFile");
-const { setThemeApp } = require("../config/theme");
-const { setColorTextApp } = require("../config/color");
-const { setFontApp } = require("../config/font");
+const { setThemeApp } = require("../preferences/theme");
+const { setColorTextApp } = require("../preferences/color");
+const { setFontApp } = require("../preferences/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
-const { setZoomApp } = require("../config/zoom");
-const { setEditorType } = require("../config/editor");
-const { setThemeAppCode } = require("../config/themeCode");
+const { setZoomApp } = require("../preferences/zoom");
+const { setEditorType } = require("../preferences/editor");
+const { setThemeAppCode } = require("../preferences/themeCode");
 
 const buildTemplateMenu = (win) => {
   const getIcon = (iconName) => {
