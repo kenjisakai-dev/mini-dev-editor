@@ -13,6 +13,7 @@ const {
 const { dialogConfirmExit } = require("../menu/dialogFile");
 const ipcMainEventsTerminal = require("../helpers/terminal");
 const shortcuts = require("../helpers/shortcuts");
+const { EVENTS_PREFERENCES } = require("../shared/constants");
 
 let win;
 
@@ -32,15 +33,15 @@ const createMainWindow = async () => {
   win.loadFile("src/views/index.html");
 
   win.webContents.on("did-finish-load", () => {
-    win.webContents.send("set-theme", themeApp());
-    win.webContents.send("set-color", colorTextApp());
+    win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
+    win.webContents.send(EVENTS_PREFERENCES.SET_COLOR, colorTextApp());
     win.webContents.setZoomFactor(zoomApp());
     win.webContents.send("set-editor-type", {
       editorType: editorTypeApp(),
       editorName: editorNameApp(),
     });
     win.webContents.send("set-theme-code", themeAppCode());
-    win.webContents.send("set-font", fontApp());
+    win.webContents.send(EVENTS_PREFERENCES.SET_FONT, fontApp());
   });
 
   win.on("close", (event) => {

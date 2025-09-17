@@ -1,6 +1,7 @@
 const { BrowserWindow } = require("electron");
 const path = require("path");
 const { themeApp } = require("../config/config");
+const { EVENTS_PREFERENCES } = require("../shared/constants");
 
 const createAboutWindow = () => {
   const mainWindow = BrowserWindow.getFocusedWindow();
@@ -24,7 +25,7 @@ const createAboutWindow = () => {
     win.loadFile(path.join(__dirname, "..", "views", "sobre.html"));
 
     win.on("ready-to-show", () => {
-      win.webContents.send("set-theme", themeApp());
+      win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
       win.show();
     });
   }

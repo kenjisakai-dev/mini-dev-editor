@@ -1,12 +1,11 @@
 const { nativeTheme } = require("electron");
-const { colorTextApp } = require("../config/config");
 const { store } = require("./store");
+const { EVENTS_PREFERENCES } = require("../shared/constants");
 
 const setThemeApp = (win, themeSelected) => {
   try {
     nativeTheme.themeSource = themeSelected;
-    win.webContents.send("set-theme", themeSelected);
-    win.webContents.send("set-color", colorTextApp());
+    win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeSelected);
     store.set("preferences.themeApp", themeSelected);
   } catch (err) {
     console.error(`Erro ao mudar tema: ${err?.message}`);
