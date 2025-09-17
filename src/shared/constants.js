@@ -4,4 +4,9 @@ module.exports = {
     SET_THEME: "preferences:setTheme",
     SET_FONT: "preferences:setFont",
   },
+
+  EVENTS_FILE: {
+    SET_FILE: "file:setFile",
+    UPDATE_CONTENT: "file:updateContent",
+  },
 };
