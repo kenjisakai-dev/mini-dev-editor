@@ -1,5 +1,5 @@
 const Store = require("electron-store").default;
-const { editorNameApp } = require("../config/config");
+const { editorTerminal } = require("../config/config");
 
 const store = new Store({
   defaults: {
@@ -12,7 +12,7 @@ const store = new Store({
 
 function appendCommand(command) {
   try {
-    const editorName = editorNameApp().replace(".exe", "");
+    const editorName = editorTerminal().replace(".exe", "");
 
     const commands = store.get(`${editorName}.commands`, []);
     const lastCommand = store.get(`${editorName}.lastCommand`, "");
@@ -28,7 +28,7 @@ function appendCommand(command) {
 
 function readCommands() {
   try {
-    const editorName = editorNameApp().replace(".exe", "");
+    const editorName = editorTerminal().replace(".exe", "");
     return store.get(`${editorName}.commands`, []);
   } catch (err) {
     console.error(`Erro ao obter comandos do histórico: ${err?.message}`);

@@ -3,19 +3,14 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("api", {
   setTheme: (theme) => ipcRenderer.on("preferences:setTheme", theme),
   setColor: (color) => ipcRenderer.on("preferences:setColor", color),
-  setFont: (font) => ipcRenderer.on("preferences:setFont", font),
+  setTerminal: (terminal) =>
+    ipcRenderer.on("preferences:setTerminal", terminal),
 
-  setFile: (file) => ipcRenderer.on("set-file", file),
-  updateContent: (content) => ipcRenderer.send("update-content", content),
-  setEditorType: (editor) => ipcRenderer.on("set-editor-type", editor),
-
-  terminalInput: (input) => ipcRenderer.send("terminal-input", input),
+  terminalInput: (input) => ipcRenderer.send("terminal:input", input),
   terminalOutput: (outputObject) =>
-    ipcRenderer.on("terminal-output", outputObject),
+    ipcRenderer.on("terminal:output", outputObject),
 
-  getHistoryCommands: () => ipcRenderer.invoke("get-history-commands"),
+  getHistoryCommands: () => ipcRenderer.invoke("terminal:getHistoryCommand"),
   appendHistoryCommand: (command) =>
-    ipcRenderer.send("append-history-command", command),
-
-  setThemeCode: (themeCode) => ipcRenderer.on("set-theme-code", themeCode),
+    ipcRenderer.send("terminal:appendHistoryCommand", command),
 });

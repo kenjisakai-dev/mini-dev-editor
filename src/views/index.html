@@ -5,41 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="titulo">Mini Dev Editor</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
-      rel="stylesheet"
-    />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/lib/codemirror.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/material-darker.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/dracula.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/monokai.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/darcula.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/theme/solarized.css"
     />
 
     <link rel="stylesheet" href="../public/css/style.css" />
@@ -49,35 +17,19 @@
       content="
       default-src 'self'; 
       script-src 'self' https://cdn.jsdelivr.net; 
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; 
-      style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; 
-      font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;"
+      style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; 
+      style-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net; 
+      font-src 'self' https://cdn.jsdelivr.net;"
     />
   </head>
   <body>
     <div id="container">
-      <div id="txtEditor">
-        <div id="linhas"></div>
-        <textarea id="txtArea" spellcheck="false" wrap="off"></textarea>
-      </div>
       <div id="terminal"></div>
-      <div id="codeEditor"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/lib/codemirror.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/edit/matchbrackets.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/edit/closebrackets.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/addon/selection/active-line.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/javascript/javascript.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/python/python.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.20/mode/clike/clike.js"></script>
-
     <script src="renderer.js"></script>
-    <script src="editorText.js"></script>
-    <script src="terminal.js"></script>
-    <script src="code.js"></script>
   </body>
 </html>

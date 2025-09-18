@@ -1,13 +1,14 @@
 const { ipcMain } = require("electron");
 const { spawn } = require("child_process");
-const { editorNameApp } = require("../config/config");
+const { editorTerminal } = require("../config/config");
 const { readCommands, appendCommand } = require("../helpers/historyCommands");
+const { EVENTS_TERMINAL } = require("../shared/constants");
 
 module.exports = (win) => {
-  ipcMain.on("terminal-input", (event, input) => {
+  ipcMain.on(EVENTS_TERMINAL.TERMINAL_INPUT, (event, input) => {
     let numericMessage = 0;
     let shellArgs = [];
-    const shellName = editorNameApp();
+    const shellName = editorTerminal();
 
     if (shellName === "cmd.exe") {
       shellArgs = ["/c", input];
@@ -23,10 +24,10 @@ module.exports = (win) => {
     const shell = spawn(shellName, shellArgs, { encoding: "utf8" });
 
     shell.stdout.on("data", (data) => {
-      win?.webContents.send("terminal-output", {
+      win?.webContents.send(EVENTS_TERMINAL.TERMINAL_OUTPUT, {
         finished: false,
         message: data.toString(),
-        editorName: editorNameApp(),
+        editorTerminal: editorTerminal(),
         numericMessage,
       });
 
@@ -35,10 +36,10 @@ module.exports = (win) => {
     });
 
     shell.stderr.on("data", (data) => {
-      win?.webContents.send("terminal-output", {
+      win?.webContents.send(EVENTS_TERMINAL.TERMINAL_OUTPUT, {
         finished: false,
         message: data.toString(),
-        editorName: editorNameApp(),
+        editorTerminal: editorTerminal(),
         numericMessage,
       });
 
@@ -47,10 +48,10 @@ module.exports = (win) => {
     });
 
     shell.on("close", (code) => {
-      win.webContents.send("terminal-output", {
+      win.webContents.send(EVENTS_TERMINAL.TERMINAL_OUTPUT, {
         finished: true,
         message: `Processo finalizado: ${code}`,
-        editorName: editorNameApp(),
+        editorTerminal: editorTerminal(),
         numericMessage,
       });
 
@@ -58,12 +59,12 @@ module.exports = (win) => {
     });
   });
 
-  ipcMain.handle("get-history-commands", (event) => {
+  ipcMain.handle(EVENTS_TERMINAL.GET_HISTORY_COMMAND, (event) => {
     const historyCommands = readCommands();
     return historyCommands;
   });
 
-  ipcMain.on("append-history-command", (event, command) => {
+  ipcMain.on(EVENTS_TERMINAL.APPEND_HISTORY_COMMAND, (event, command) => {
     appendCommand(command);
   });
 };

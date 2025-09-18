@@ -1,15 +1,14 @@
 const { store } = require("./store");
 
-const setEditorType = async (win, editorType, editorName) => {
+const setTerminal = async (win, editorTerminal) => {
   try {
-    win.webContents.send("set-editor-type", { editorType, editorName });
-    store.set("preferences.editorTypeApp", editorType);
-    store.set("preferences.editorNameApp", editorName);
+    win.webContents.send("setTerminal", editorTerminal);
+    store.set("preferences.editorTerminal", editorTerminal);
   } catch (err) {
-    console.error(`Erro ao mudar editor: ${err?.message}`);
+    console.error(`Erro ao mudar terminal: ${err?.message}`);
   }
 };
 
 module.exports = {
-  setEditorType,
+  setTerminal,
 };

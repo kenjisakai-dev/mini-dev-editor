@@ -1,24 +1,17 @@
 const path = require("path");
 const { Menu, nativeTheme, MenuItem } = require("electron");
 const {
-  colorTextApp,
   themeApp,
-  fontApp,
+  colorTextApp,
   zoomApp,
   zoomAppDefault,
-  editorTypeApp,
-  editorNameApp,
-  themeAppCode,
+  editorTerminal,
 } = require("../config/config");
-const { openFile, saveFile } = require("../helpers/contentFile");
-const { dialogNewFile } = require("./dialogFile");
 const { setThemeApp } = require("../preferences/theme");
 const { setColorTextApp } = require("../preferences/color");
-const { setFontApp } = require("../preferences/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
 const { setZoomApp } = require("../preferences/zoom");
-const { setEditorType } = require("../preferences/editor");
-const { setThemeAppCode } = require("../preferences/themeCode");
+const { setTerminal } = require("../preferences/editor");
 
 const buildTemplateMenu = (win) => {
   const getIcon = (iconName) => {
@@ -33,129 +26,16 @@ const buildTemplateMenu = (win) => {
 
   const templateMenu = Menu.buildFromTemplate([]);
 
-  const menuType = new MenuItem({
-    label: "Tipo",
+  const menuTerminal = new MenuItem({
+    label: "Terminal",
     submenu: [
-      {
-        label: "Texto",
-        type: "checkbox",
-        checked: editorNameApp() === "text",
-        click: async () => {
-          if (editorNameApp() !== "text") {
-            if (editorTypeApp() === "code") {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "txt", "text");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "JavaScript",
-        type: "checkbox",
-        checked: editorNameApp() === "javascript",
-        click: async () => {
-          if (editorNameApp() !== "javascript") {
-            if (
-              ["text", "text/typescript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "javascript");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "TypeScript",
-        type: "checkbox",
-        checked: editorNameApp() === "text/typescript",
-        click: async () => {
-          if (editorNameApp() !== "text/typescript") {
-            if (
-              ["text", "javascript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "text/typescript");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Python",
-        type: "checkbox",
-        checked: editorNameApp() === "python",
-        click: async () => {
-          if (editorNameApp() !== "python") {
-            if (
-              [
-                "text",
-                "javascript",
-                "text/typescript",
-                "text/x-csharp",
-              ].includes(editorNameApp())
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "python");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "C#",
-        type: "checkbox",
-        checked: editorNameApp() === "text/x-csharp",
-        click: async () => {
-          if (editorNameApp() !== "text/x-csharp") {
-            if (
-              ["text", "javascript", "text/typescript", "python"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "text/x-csharp");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
       {
         label: "Powershell 5",
         type: "checkbox",
-        checked: editorNameApp() === "powershell.exe",
+        checked: editorTerminal() === "powershell.exe",
+        enabled: editorTerminal() === "powershell.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "powershell.exe");
+          await setTerminal(win, "powershell.exe");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
@@ -163,13 +43,10 @@ const buildTemplateMenu = (win) => {
       {
         label: "Powershell 7",
         type: "checkbox",
-        checked: editorNameApp() === "pwsh.exe",
+        checked: editorTerminal() === "pwsh.exe",
+        enabled: editorTerminal() === "pwsh.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "pwsh.exe");
+          await setTerminal(win, "pwsh.exe");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
@@ -177,92 +54,13 @@ const buildTemplateMenu = (win) => {
       {
         label: "CMD",
         type: "checkbox",
-        checked: editorNameApp() === "cmd.exe",
+        checked: editorTerminal() === "cmd.exe",
+        enabled: editorTerminal() === "cmd.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "cmd.exe");
+          await setTerminal(win, "cmd.exe");
           buildTemplateMenu(win);
           win.webContents.reload();
         },
-      },
-    ],
-  });
-  const menuFile = new MenuItem({
-    label: "Arquivo",
-    submenu: [
-      {
-        label: "Novo",
-        accelerator: "CmdOrCtrl+N",
-        click: () => dialogNewFile(win),
-        icon: getIconTheme("new-file"),
-      },
-      {
-        label: "Abrir",
-        accelerator: "CmdOrCtrl+O",
-        click: () => openFile(win),
-        icon: getIconTheme("open-file"),
-      },
-      {
-        label: "Salvar",
-        accelerator: "CmdOrCtrl+S",
-        click: () => saveFile(win, false),
-        icon: getIconTheme("save-file"),
-      },
-      {
-        label: "Salvar Como",
-        accelerator: "CmdOrCtrl+Shift+S",
-        click: () => saveFile(win, true),
-        icon: getIconTheme("save-as-file"),
-      },
-    ],
-  });
-  const menuEditor = new MenuItem({
-    label: "Editor",
-    submenu: [
-      {
-        label: "Desfazer",
-        role: "undo",
-        accelerator: "CmdOrCtrl+Z",
-        icon: getIconTheme("undo"),
-      },
-      {
-        label: "Refazer",
-        role: "redo",
-        accelerator: "CmdOrCtrl+Y",
-        icon: getIconTheme("redo"),
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Recortar",
-        role: "cut",
-        accelerator: "CmdOrCtrl+X",
-        icon: getIconTheme("cut"),
-      },
-      {
-        label: "Copiar",
-        role: "copy",
-        accelerator: "CmdOrCtrl+C",
-        icon: getIconTheme("copy"),
-      },
-      {
-        label: "Colar",
-        role: "paste",
-        accelerator: "CmdOrCtrl+V",
-        icon: getIconTheme("paste"),
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Recarregar",
-        role: "reload",
-        accelerator: "CmdOrCtrl+R",
-        icon: getIconTheme("reload"),
       },
     ],
   });
@@ -302,58 +100,6 @@ const buildTemplateMenu = (win) => {
         click: () => {
           win.webContents.setZoomFactor(zoomAppDefault());
           setZoomApp(zoomAppDefault());
-        },
-        icon: getIconTheme("reset"),
-      },
-    ],
-  });
-  const menuFont = new MenuItem({
-    label: "Fonte",
-    submenu: [
-      {
-        label: "Source Code Pro",
-        click: () => {
-          setFontApp(win, "Source Code Pro");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Source Code Pro",
-      },
-      {
-        label: "Inter",
-        click: () => {
-          setFontApp(win, "Inter");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Inter",
-      },
-      {
-        label: "Bebas Neue",
-        click: () => {
-          setFontApp(win, "Bebas Neue");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Bebas Neue",
-      },
-      {
-        label: "Arial",
-        click: () => {
-          setFontApp(win, "Arial");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Arial",
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Restaurar Fonte",
-        click: () => {
-          setFontApp(win, "Source Code Pro");
-          buildTemplateMenu(win);
         },
         icon: getIconTheme("reset"),
       },
@@ -483,66 +229,6 @@ const buildTemplateMenu = (win) => {
       },
     ],
   });
-  const menuThemeCode = new MenuItem({
-    label: "Tema",
-    submenu: [
-      {
-        label: "Material Darker",
-        type: "checkbox",
-        checked: themeAppCode() === "material-darker",
-        click: () => {
-          setThemeAppCode(win, "material-darker");
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Dracula",
-        type: "checkbox",
-        checked: themeAppCode() === "dracula",
-        click: () => {
-          setThemeAppCode(win, "dracula");
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Monokai",
-        type: "checkbox",
-        checked: themeAppCode() === "monokai",
-        click: () => {
-          setThemeAppCode(win, "monokai");
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Darcula",
-        type: "checkbox",
-        checked: themeAppCode() === "darcula",
-        click: () => {
-          setThemeAppCode(win, "darcula");
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        label: "Solarized",
-        type: "checkbox",
-        checked: themeAppCode() === "solarized",
-        click: () => {
-          setThemeAppCode(win, "solarized");
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Restaurar Tema",
-        click: () => {
-          setThemeAppCode(win, "material-darker");
-          buildTemplateMenu(win);
-        },
-      },
-    ],
-  });
   const menuHelp = new MenuItem({
     label: "Ajuda",
     submenu: [
@@ -554,33 +240,11 @@ const buildTemplateMenu = (win) => {
     ],
   });
 
-  if (editorTypeApp() === "txt") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuFile);
-    templateMenu.append(menuEditor);
-    templateMenu.append(menuFont);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuColor);
-    templateMenu.append(menuTheme);
-    templateMenu.append(menuHelp);
-  }
-
-  if (editorTypeApp() === "terminal") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuColor);
-    templateMenu.append(menuTheme);
-    templateMenu.append(menuHelp);
-  }
-
-  if (editorTypeApp() === "code") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuFile);
-    templateMenu.append(menuEditor);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuThemeCode);
-    templateMenu.append(menuHelp);
-  }
+  templateMenu.append(menuTerminal);
+  templateMenu.append(menuZoom);
+  templateMenu.append(menuColor);
+  templateMenu.append(menuTheme);
+  templateMenu.append(menuHelp);
 
   Menu.setApplicationMenu(templateMenu);
 };
