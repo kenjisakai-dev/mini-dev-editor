@@ -4,7 +4,6 @@ const {
   colorTextApp,
   themeApp,
   fontApp,
-  zoomApp,
   zoomAppDefault,
   editorTypeApp,
   editorNameApp,
@@ -16,7 +15,13 @@ const { setThemeApp } = require("../preferences/theme");
 const { setColorTextApp } = require("../preferences/color");
 const { setFontApp } = require("../preferences/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
-const { setZoomApp } = require("../preferences/zoom");
+const {
+  setZoomApp,
+  permissionZoomIn,
+  zoomIn,
+  permissionZoomOut,
+  zoomOut,
+} = require("../preferences/zoom");
 const { setEditorType } = require("../preferences/editor");
 const { setThemeAppCode } = require("../preferences/themeCode");
 
@@ -37,19 +42,19 @@ const buildTemplateMenu = (win) => {
     label: "Tipo",
     submenu: [
       {
+        label: "Editor de Texto",
+        enabled: false,
+      },
+      {
         label: "Texto",
         type: "checkbox",
         checked: editorNameApp() === "text",
+        enabled: editorNameApp() === "text" ? false : true,
         click: async () => {
-          if (editorNameApp() !== "text") {
-            if (editorTypeApp() === "code") {
-              await dialogNewFile(win);
-            }
+          if (editorTypeApp() === "code") await dialogNewFile(win);
 
-            await setEditorType(win, "txt", "text");
-            win.webContents.reload();
-          }
-
+          await setEditorType(win, "txt", "text");
+          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -57,23 +62,25 @@ const buildTemplateMenu = (win) => {
         type: "separator",
       },
       {
+        label: "Editor de Código",
+        enabled: false,
+      },
+      {
         label: "JavaScript",
         type: "checkbox",
         checked: editorNameApp() === "javascript",
+        enabled: editorNameApp() === "javascript" ? false : true,
         click: async () => {
-          if (editorNameApp() !== "javascript") {
-            if (
-              ["text", "text/typescript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "javascript");
-            win.webContents.reload();
+          if (
+            ["text", "text/typescript", "python", "text/x-csharp"].includes(
+              editorNameApp()
+            )
+          ) {
+            await dialogNewFile(win);
           }
 
+          await setEditorType(win, "code", "javascript");
+          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -81,20 +88,18 @@ const buildTemplateMenu = (win) => {
         label: "TypeScript",
         type: "checkbox",
         checked: editorNameApp() === "text/typescript",
+        enabled: editorNameApp() === "text/typescript" ? false : true,
         click: async () => {
-          if (editorNameApp() !== "text/typescript") {
-            if (
-              ["text", "javascript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "text/typescript");
-            win.webContents.reload();
+          if (
+            ["text", "javascript", "python", "text/x-csharp"].includes(
+              editorNameApp()
+            )
+          ) {
+            await dialogNewFile(win);
           }
 
+          await setEditorType(win, "code", "text/typescript");
+          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -102,23 +107,18 @@ const buildTemplateMenu = (win) => {
         label: "Python",
         type: "checkbox",
         checked: editorNameApp() === "python",
+        enabled: editorNameApp() === "python" ? false : true,
         click: async () => {
-          if (editorNameApp() !== "python") {
-            if (
-              [
-                "text",
-                "javascript",
-                "text/typescript",
-                "text/x-csharp",
-              ].includes(editorNameApp())
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "python");
-            win.webContents.reload();
+          if (
+            ["text", "javascript", "text/typescript", "text/x-csharp"].includes(
+              editorNameApp()
+            )
+          ) {
+            await dialogNewFile(win);
           }
 
+          await setEditorType(win, "code", "python");
+          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -126,20 +126,18 @@ const buildTemplateMenu = (win) => {
         label: "C#",
         type: "checkbox",
         checked: editorNameApp() === "text/x-csharp",
+        enabled: editorNameApp() === "text/x-csharp" ? false : true,
         click: async () => {
-          if (editorNameApp() !== "text/x-csharp") {
-            if (
-              ["text", "javascript", "text/typescript", "python"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "text/x-csharp");
-            win.webContents.reload();
+          if (
+            ["text", "javascript", "text/typescript", "python"].includes(
+              editorNameApp()
+            )
+          ) {
+            await dialogNewFile(win);
           }
 
+          await setEditorType(win, "code", "text/x-csharp");
+          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -147,9 +145,14 @@ const buildTemplateMenu = (win) => {
         type: "separator",
       },
       {
+        label: "Terminal",
+        enabled: false,
+      },
+      {
         label: "Powershell 5",
         type: "checkbox",
         checked: editorNameApp() === "powershell.exe",
+        enabled: editorNameApp() === "powershell.exe" ? false : true,
         click: async () => {
           if (["text", "javascript", "python"].includes(editorNameApp())) {
             await dialogNewFile(win);
@@ -164,6 +167,7 @@ const buildTemplateMenu = (win) => {
         label: "Powershell 7",
         type: "checkbox",
         checked: editorNameApp() === "pwsh.exe",
+        enabled: editorNameApp() === "pwsh.exe" ? false : true,
         click: async () => {
           if (["text", "javascript", "python"].includes(editorNameApp())) {
             await dialogNewFile(win);
@@ -178,6 +182,7 @@ const buildTemplateMenu = (win) => {
         label: "CMD",
         type: "checkbox",
         checked: editorNameApp() === "cmd.exe",
+        enabled: editorNameApp() === "cmd.exe" ? false : true,
         click: async () => {
           if (["text", "javascript", "python"].includes(editorNameApp())) {
             await dialogNewFile(win);
@@ -272,24 +277,24 @@ const buildTemplateMenu = (win) => {
       {
         label: "Aplicar zoom",
         accelerator: "CmdOrCtrl+=",
+        enabled: permissionZoomIn(),
         click: () => {
-          const zoom = parseFloat((zoomApp() + 0.1).toFixed(1));
-          if (zoom <= 2) {
-            win.webContents.setZoomFactor(zoom);
-            setZoomApp(zoom);
-          }
+          const zoom = zoomIn();
+          win.webContents.setZoomFactor(zoom);
+          setZoomApp(zoom);
+          buildTemplateMenu(win);
         },
         icon: getIconTheme("zoom-in"),
       },
       {
         label: "Reduzir zoom",
         accelerator: "CmdOrCtrl+-",
+        enabled: permissionZoomOut(),
         click: () => {
-          const zoom = parseFloat((zoomApp() - 0.1).toFixed(1));
-          if (zoom >= 1) {
-            win.webContents.setZoomFactor(zoom);
-            setZoomApp(zoom);
-          }
+          const zoom = zoomOut();
+          win.webContents.setZoomFactor(zoom);
+          setZoomApp(zoom);
+          buildTemplateMenu(win);
         },
         icon: getIconTheme("zoom-out"),
       },
@@ -302,6 +307,7 @@ const buildTemplateMenu = (win) => {
         click: () => {
           win.webContents.setZoomFactor(zoomAppDefault());
           setZoomApp(zoomAppDefault());
+          buildTemplateMenu(win);
         },
         icon: getIconTheme("reset"),
       },
@@ -318,6 +324,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: fontApp() === "Source Code Pro",
+        enabled: fontApp() === "Source Code Pro" ? false : true,
       },
       {
         label: "Inter",
@@ -327,6 +334,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: fontApp() === "Inter",
+        enabled: fontApp() === "Inter" ? false : true,
       },
       {
         label: "Bebas Neue",
@@ -336,6 +344,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: fontApp() === "Bebas Neue",
+        enabled: fontApp() === "Bebas Neue" ? false : true,
       },
       {
         label: "Arial",
@@ -345,6 +354,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: fontApp() === "Arial",
+        enabled: fontApp() === "Arial" ? false : true,
       },
       {
         type: "separator",
@@ -370,6 +380,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "cinzaClaro",
+        enabled: colorTextApp() === "cinzaClaro" ? false : true,
         icon: getIcon("text-color-light-grey"),
       },
       {
@@ -380,6 +391,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "amarelo",
+        enabled: colorTextApp() === "amarelo" ? false : true,
         icon: getIcon("text-color-yellow"),
       },
       {
@@ -390,6 +402,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "azul",
+        enabled: colorTextApp() === "azul" ? false : true,
         icon: getIcon("text-color-blue"),
       },
       {
@@ -400,6 +413,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "laranja",
+        enabled: colorTextApp() === "laranja" ? false : true,
         icon: getIcon("text-color-orange"),
       },
       {
@@ -410,6 +424,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "pink",
+        enabled: colorTextApp() === "pink" ? false : true,
         icon: getIcon("text-color-pink"),
       },
       {
@@ -420,6 +435,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "roxo",
+        enabled: colorTextApp() === "roxo" ? false : true,
         icon: getIcon("text-color-purple"),
       },
       {
@@ -430,6 +446,7 @@ const buildTemplateMenu = (win) => {
         },
         type: "checkbox",
         checked: colorTextApp() === "verde",
+        enabled: colorTextApp() === "verde" ? false : true,
         icon: getIcon("text-color-green"),
       },
       {
@@ -452,6 +469,7 @@ const buildTemplateMenu = (win) => {
         label: "Escuro",
         type: "checkbox",
         checked: themeApp() === "dark",
+        enabled: themeApp() === "dark" ? false : true,
         click: () => {
           setThemeApp(win, "dark");
           buildTemplateMenu(win);
@@ -462,6 +480,7 @@ const buildTemplateMenu = (win) => {
         label: "Claro",
         type: "checkbox",
         checked: themeApp() === "light",
+        enabled: themeApp() === "light" ? false : true,
         click: () => {
           setThemeApp(win, "light");
           buildTemplateMenu(win);
@@ -490,6 +509,7 @@ const buildTemplateMenu = (win) => {
         label: "Material Darker",
         type: "checkbox",
         checked: themeAppCode() === "material-darker",
+        enabled: themeAppCode() === "material-darker" ? false : true,
         click: () => {
           setThemeAppCode(win, "material-darker");
           buildTemplateMenu(win);
@@ -499,6 +519,7 @@ const buildTemplateMenu = (win) => {
         label: "Dracula",
         type: "checkbox",
         checked: themeAppCode() === "dracula",
+        enabled: themeAppCode() === "dracula" ? false : true,
         click: () => {
           setThemeAppCode(win, "dracula");
           buildTemplateMenu(win);
@@ -508,6 +529,7 @@ const buildTemplateMenu = (win) => {
         label: "Monokai",
         type: "checkbox",
         checked: themeAppCode() === "monokai",
+        enabled: themeAppCode() === "monokai" ? false : true,
         click: () => {
           setThemeAppCode(win, "monokai");
           buildTemplateMenu(win);
@@ -517,6 +539,7 @@ const buildTemplateMenu = (win) => {
         label: "Darcula",
         type: "checkbox",
         checked: themeAppCode() === "darcula",
+        enabled: themeAppCode() === "darcula" ? false : true,
         click: () => {
           setThemeAppCode(win, "darcula");
           buildTemplateMenu(win);
@@ -526,6 +549,7 @@ const buildTemplateMenu = (win) => {
         label: "Solarized",
         type: "checkbox",
         checked: themeAppCode() === "solarized",
+        enabled: themeAppCode() === "solarized" ? false : true,
         click: () => {
           setThemeAppCode(win, "solarized");
           buildTemplateMenu(win);

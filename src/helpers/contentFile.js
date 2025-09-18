@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const { app, dialog, ipcMain } = require("electron");
 const { editorNameApp } = require("../config/config");
+const { EVENTS_FILE } = require("../shared/constants");
 
 let fileContent = {};
 
@@ -14,7 +15,7 @@ function newFile(win) {
     path: path.join(app.getPath("desktop"), "Sem titulo"),
   };
 
-  win.webContents.send("set-file", fileContent);
+  win.webContents.send(EVENTS_FILE.SET_FILE, fileContent);
 }
 
 async function openFile(win) {
@@ -39,7 +40,7 @@ async function openFile(win) {
       path: filePath,
     };
 
-    win.webContents.send("set-file", fileContent);
+    win.webContents.send(EVENTS_FILE.SET_FILE, fileContent);
   } catch (err) {
     console.log(err?.message);
   }
@@ -70,7 +71,7 @@ async function saveFile(win, salvarComo) {
     fileContent.currentSaved = true;
     fileContent.path = filePath;
 
-    win.webContents.send("set-file", fileContent);
+    win.webContents.send(EVENTS_FILE.SET_FILE, fileContent);
 
     return true;
   } catch (err) {
@@ -113,7 +114,7 @@ function getExtensions() {
   ].filter((item) => item.editorName === editorNameApp());
 }
 
-ipcMain.on("update-content", (_event, content) => {
+ipcMain.on(EVENTS_FILE.UPDATE_CONTENT, (_event, content) => {
   fileContent.content = content;
   fileContent.currentSaved = false;
 });

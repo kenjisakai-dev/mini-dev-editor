@@ -15,10 +15,8 @@ const ipcMainEventsTerminal = require("../helpers/terminal");
 const shortcuts = require("../helpers/shortcuts");
 const { EVENTS_PREFERENCES } = require("../shared/constants");
 
-let win;
-
 const createMainWindow = async () => {
-  win = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 1010,
     height: 720,
     icon: path.join(__dirname, "..", "public", "icons", "icon.png"),
@@ -28,32 +26,34 @@ const createMainWindow = async () => {
   });
 
   nativeTheme.themeSource = themeApp();
-  buildTemplateMenu(win);
+  buildTemplateMenu(mainWindow);
 
-  win.loadFile("src/views/index.html");
+  mainWindow.loadFile("src/views/index.html");
 
-  win.webContents.on("did-finish-load", () => {
-    win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
-    win.webContents.send(EVENTS_PREFERENCES.SET_COLOR, colorTextApp());
-    win.webContents.setZoomFactor(zoomApp());
-    win.webContents.send("set-editor-type", {
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
+    mainWindow.webContents.send(EVENTS_PREFERENCES.SET_COLOR, colorTextApp());
+    mainWindow.webContents.setZoomFactor(zoomApp());
+    mainWindow.webContents.send(EVENTS_PREFERENCES.SET_EDITOR_TYPE, {
       editorType: editorTypeApp(),
       editorName: editorNameApp(),
     });
-    win.webContents.send("set-theme-code", themeAppCode());
-    win.webContents.send(EVENTS_PREFERENCES.SET_FONT, fontApp());
+    mainWindow.webContents.send(
+      EVENTS_PREFERENCES.SET_THEME_CODE,
+      themeAppCode()
+    );
+    mainWindow.webContents.send(EVENTS_PREFERENCES.SET_FONT, fontApp());
   });
 
-  win.on("close", (event) => {
+  mainWindow.on("close", (event) => {
     event.preventDefault();
-    dialogConfirmExit(win);
+    dialogConfirmExit(mainWindow);
   });
 
-  shortcuts(win);
-  ipcMainEventsTerminal(win);
+  shortcuts(mainWindow);
+  ipcMainEventsTerminal(mainWindow);
 };
 
 module.exports = {
   createMainWindow,
-  win,
 };
