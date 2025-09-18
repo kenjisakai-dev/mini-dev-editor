@@ -1,23 +1,50 @@
 const { dialog } = require("electron");
 const fs = require("fs");
 
+jest.mock("electron", () => ({
+  app: {
+    getPath: jest.fn(() => "tests/mocks"),
+  },
+  ipcMain: {
+    on: jest.fn(),
+  },
+  dialog: {
+    showOpenDialog: jest.fn(),
+    showSaveDialog: jest.fn(),
+  },
+}));
+
+jest.mock("electron-store", () => {
+  return {
+    default: function () {
+      return {
+        get: jest.fn(() => "javascript"),
+        set: jest.fn(),
+      };
+    },
+  };
+});
+
 describe("contentFile", () => {
   let contentFile;
-  let win;
+  let win = {
+    webContents: {
+      send: jest.fn(),
+    },
+  };
+
+  const clearMocks = () => {
+    const filepathSave = "./tests/mocks/save.txt";
+    fs.rmSync(filepathSave, { force: true });
+  };
 
   beforeEach(() => {
     contentFile = require("../../src/helpers/contentFile");
-    win = {
-      webContents: {
-        send: jest.fn(),
-      },
-    };
+    clearMocks();
   });
 
   afterAll(() => {
-    if (fs.existsSync("./tests/mocks/save.txt")) {
-      fs.unlinkSync("./tests/mocks/save.txt");
-    }
+    clearMocks();
   });
 
   test("criar um novo arquivo", () => {

@@ -1,10 +1,8 @@
-const { nativeTheme } = require("electron");
 const { store } = require("./store");
 const { EVENTS_PREFERENCES } = require("../shared/constants");
 
 const setThemeApp = (win, themeSelected) => {
   try {
-    nativeTheme.themeSource = themeSelected;
     win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeSelected);
     store.set("preferences.themeApp", themeSelected);
   } catch (err) {

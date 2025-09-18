@@ -1,30 +1,19 @@
 const path = require("path");
 const { Menu, nativeTheme, MenuItem } = require("electron");
 const {
-  colorTextApp,
   themeApp,
-  fontApp,
   zoomApp,
   zoomAppDefault,
-  editorTypeApp,
-  editorNameApp,
-  themeAppCode,
+  editorLanguage,
 } = require("../config/config");
 const { openFile, saveFile } = require("../helpers/contentFile");
 const { dialogNewFile } = require("./dialogFile");
-const { setThemeApp } = require("../preferences/theme");
-const { setColorTextApp } = require("../preferences/color");
-const { setFontApp } = require("../preferences/font");
 const { createAboutWindow } = require("../pages/aboutWindow");
 const { setZoomApp } = require("../preferences/zoom");
-const { setEditorType } = require("../preferences/editor");
-const { setThemeAppCode } = require("../preferences/themeCode");
+const { setEditorLanguage } = require("../preferences/editor");
+const { setThemeApp } = require("../preferences/theme");
 
 const buildTemplateMenu = (win) => {
-  const getIcon = (iconName) => {
-    return path.join(__dirname, "..", "public", "icons", `${iconName}.png`);
-  };
-
   const getIconTheme = (iconName) => {
     const isDark = nativeTheme.shouldUseDarkColors;
     const themeIcon = isDark ? `${iconName}-dark.png` : `${iconName}-light.png`;
@@ -33,44 +22,17 @@ const buildTemplateMenu = (win) => {
 
   const templateMenu = Menu.buildFromTemplate([]);
 
-  const menuType = new MenuItem({
-    label: "Tipo",
+  const menuLanguage = new MenuItem({
+    label: "Linguagem",
     submenu: [
-      {
-        label: "Texto",
-        type: "checkbox",
-        checked: editorNameApp() === "text",
-        click: async () => {
-          if (editorNameApp() !== "text") {
-            if (editorTypeApp() === "code") {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "txt", "text");
-            win.webContents.reload();
-          }
-
-          buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
       {
         label: "JavaScript",
         type: "checkbox",
-        checked: editorNameApp() === "javascript",
+        checked: editorLanguage() === "javascript",
         click: async () => {
-          if (editorNameApp() !== "javascript") {
-            if (
-              ["text", "text/typescript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "javascript");
+          if (editorLanguage() !== "javascript") {
+            await dialogNewFile(win);
+            await setEditorLanguage(win, "javascript");
             win.webContents.reload();
           }
 
@@ -80,18 +42,12 @@ const buildTemplateMenu = (win) => {
       {
         label: "TypeScript",
         type: "checkbox",
-        checked: editorNameApp() === "text/typescript",
+        checked: editorLanguage() === "text/typescript",
         click: async () => {
-          if (editorNameApp() !== "text/typescript") {
-            if (
-              ["text", "javascript", "python", "text/x-csharp"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
+          if (editorLanguage() !== "text/typescript") {
+            await dialogNewFile(win);
 
-            await setEditorType(win, "code", "text/typescript");
+            await setEditorLanguage(win, "text/typescript");
             win.webContents.reload();
           }
 
@@ -101,21 +57,11 @@ const buildTemplateMenu = (win) => {
       {
         label: "Python",
         type: "checkbox",
-        checked: editorNameApp() === "python",
+        checked: editorLanguage() === "python",
         click: async () => {
-          if (editorNameApp() !== "python") {
-            if (
-              [
-                "text",
-                "javascript",
-                "text/typescript",
-                "text/x-csharp",
-              ].includes(editorNameApp())
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "python");
+          if (editorLanguage() !== "python") {
+            await dialogNewFile(win);
+            await setEditorLanguage(win, "python");
             win.webContents.reload();
           }
 
@@ -125,67 +71,15 @@ const buildTemplateMenu = (win) => {
       {
         label: "C#",
         type: "checkbox",
-        checked: editorNameApp() === "text/x-csharp",
+        checked: editorLanguage() === "text/x-csharp",
         click: async () => {
-          if (editorNameApp() !== "text/x-csharp") {
-            if (
-              ["text", "javascript", "text/typescript", "python"].includes(
-                editorNameApp()
-              )
-            ) {
-              await dialogNewFile(win);
-            }
-
-            await setEditorType(win, "code", "text/x-csharp");
+          if (editorLanguage() !== "text/x-csharp") {
+            await dialogNewFile(win);
+            await setEditorLanguage(win, "text/x-csharp");
             win.webContents.reload();
           }
 
           buildTemplateMenu(win);
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Powershell 5",
-        type: "checkbox",
-        checked: editorNameApp() === "powershell.exe",
-        click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "powershell.exe");
-          buildTemplateMenu(win);
-          win.webContents.reload();
-        },
-      },
-      {
-        label: "Powershell 7",
-        type: "checkbox",
-        checked: editorNameApp() === "pwsh.exe",
-        click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "pwsh.exe");
-          buildTemplateMenu(win);
-          win.webContents.reload();
-        },
-      },
-      {
-        label: "CMD",
-        type: "checkbox",
-        checked: editorNameApp() === "cmd.exe",
-        click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
-          await setEditorType(win, "terminal", "cmd.exe");
-          buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
     ],
@@ -307,227 +201,51 @@ const buildTemplateMenu = (win) => {
       },
     ],
   });
-  const menuFont = new MenuItem({
-    label: "Fonte",
-    submenu: [
-      {
-        label: "Source Code Pro",
-        click: () => {
-          setFontApp(win, "Source Code Pro");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Source Code Pro",
-      },
-      {
-        label: "Inter",
-        click: () => {
-          setFontApp(win, "Inter");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Inter",
-      },
-      {
-        label: "Bebas Neue",
-        click: () => {
-          setFontApp(win, "Bebas Neue");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Bebas Neue",
-      },
-      {
-        label: "Arial",
-        click: () => {
-          setFontApp(win, "Arial");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: fontApp() === "Arial",
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Restaurar Fonte",
-        click: () => {
-          setFontApp(win, "Source Code Pro");
-          buildTemplateMenu(win);
-        },
-        icon: getIconTheme("reset"),
-      },
-    ],
-  });
-  const menuColor = new MenuItem({
-    label: "Cor",
-    submenu: [
-      {
-        label: "Cinza Claro",
-        click: () => {
-          setColorTextApp(win, "cinzaClaro");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "cinzaClaro",
-        icon: getIcon("text-color-light-grey"),
-      },
-      {
-        label: "Amarelo",
-        click: () => {
-          setColorTextApp(win, "amarelo");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "amarelo",
-        icon: getIcon("text-color-yellow"),
-      },
-      {
-        label: "Azul",
-        click: () => {
-          setColorTextApp(win, "azul");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "azul",
-        icon: getIcon("text-color-blue"),
-      },
-      {
-        label: "Laranja",
-        click: () => {
-          setColorTextApp(win, "laranja");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "laranja",
-        icon: getIcon("text-color-orange"),
-      },
-      {
-        label: "Pink",
-        click: () => {
-          setColorTextApp(win, "pink");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "pink",
-        icon: getIcon("text-color-pink"),
-      },
-      {
-        label: "Roxo",
-        click: () => {
-          setColorTextApp(win, "roxo");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "roxo",
-        icon: getIcon("text-color-purple"),
-      },
-      {
-        label: "Verde",
-        click: () => {
-          setColorTextApp(win, "verde");
-          buildTemplateMenu(win);
-        },
-        type: "checkbox",
-        checked: colorTextApp() === "verde",
-        icon: getIcon("text-color-green"),
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Restaurar Cor",
-        click: () => {
-          setColorTextApp(win, "cinzaClaro");
-          buildTemplateMenu(win);
-        },
-        icon: getIconTheme("reset"),
-      },
-    ],
-  });
   const menuTheme = new MenuItem({
-    label: "Tema",
-    submenu: [
-      {
-        label: "Escuro",
-        type: "checkbox",
-        checked: themeApp() === "dark",
-        click: () => {
-          setThemeApp(win, "dark");
-          buildTemplateMenu(win);
-        },
-        icon: getIconTheme("moon"),
-      },
-      {
-        label: "Claro",
-        type: "checkbox",
-        checked: themeApp() === "light",
-        click: () => {
-          setThemeApp(win, "light");
-          buildTemplateMenu(win);
-        },
-        icon: getIconTheme("sun"),
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Cor do Sistema",
-        type: "checkbox",
-        checked: themeApp() === "system",
-        click: () => {
-          setThemeApp(win, "system");
-          buildTemplateMenu(win);
-        },
-        icon: getIconTheme("reset"),
-      },
-    ],
-  });
-  const menuThemeCode = new MenuItem({
     label: "Tema",
     submenu: [
       {
         label: "Material Darker",
         type: "checkbox",
-        checked: themeAppCode() === "material-darker",
+        checked: themeApp() === "material-darker",
         click: () => {
-          setThemeAppCode(win, "material-darker");
+          setThemeApp(win, "material-darker");
           buildTemplateMenu(win);
         },
       },
       {
         label: "Dracula",
         type: "checkbox",
-        checked: themeAppCode() === "dracula",
+        checked: themeApp() === "dracula",
         click: () => {
-          setThemeAppCode(win, "dracula");
+          setThemeApp(win, "dracula");
           buildTemplateMenu(win);
         },
       },
       {
         label: "Monokai",
         type: "checkbox",
-        checked: themeAppCode() === "monokai",
+        checked: themeApp() === "monokai",
         click: () => {
-          setThemeAppCode(win, "monokai");
+          setThemeApp(win, "monokai");
           buildTemplateMenu(win);
         },
       },
       {
         label: "Darcula",
         type: "checkbox",
-        checked: themeAppCode() === "darcula",
+        checked: themeApp() === "darcula",
         click: () => {
-          setThemeAppCode(win, "darcula");
+          setThemeApp(win, "darcula");
           buildTemplateMenu(win);
         },
       },
       {
         label: "Solarized",
         type: "checkbox",
-        checked: themeAppCode() === "solarized",
+        checked: themeApp() === "solarized",
         click: () => {
-          setThemeAppCode(win, "solarized");
+          setThemeApp(win, "solarized");
           buildTemplateMenu(win);
         },
       },
@@ -537,7 +255,7 @@ const buildTemplateMenu = (win) => {
       {
         label: "Restaurar Tema",
         click: () => {
-          setThemeAppCode(win, "material-darker");
+          setThemeApp(win, "material-darker");
           buildTemplateMenu(win);
         },
       },
@@ -554,33 +272,12 @@ const buildTemplateMenu = (win) => {
     ],
   });
 
-  if (editorTypeApp() === "txt") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuFile);
-    templateMenu.append(menuEditor);
-    templateMenu.append(menuFont);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuColor);
-    templateMenu.append(menuTheme);
-    templateMenu.append(menuHelp);
-  }
-
-  if (editorTypeApp() === "terminal") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuColor);
-    templateMenu.append(menuTheme);
-    templateMenu.append(menuHelp);
-  }
-
-  if (editorTypeApp() === "code") {
-    templateMenu.append(menuType);
-    templateMenu.append(menuFile);
-    templateMenu.append(menuEditor);
-    templateMenu.append(menuZoom);
-    templateMenu.append(menuThemeCode);
-    templateMenu.append(menuHelp);
-  }
+  templateMenu.append(menuLanguage);
+  templateMenu.append(menuFile);
+  templateMenu.append(menuEditor);
+  templateMenu.append(menuZoom);
+  templateMenu.append(menuTheme);
+  templateMenu.append(menuHelp);
 
   Menu.setApplicationMenu(templateMenu);
 };

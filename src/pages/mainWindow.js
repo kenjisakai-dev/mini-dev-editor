@@ -1,24 +1,13 @@
-const { BrowserWindow, nativeTheme } = require("electron");
+const { BrowserWindow } = require("electron");
 const path = require("path");
 const { buildTemplateMenu } = require("../menu/menuMainWindow");
-const {
-  themeApp,
-  colorTextApp,
-  zoomApp,
-  editorTypeApp,
-  editorNameApp,
-  themeAppCode,
-  fontApp,
-} = require("../config/config");
+const { themeApp, zoomApp, editorLanguage } = require("../config/config");
 const { dialogConfirmExit } = require("../menu/dialogFile");
-const ipcMainEventsTerminal = require("../helpers/terminal");
 const shortcuts = require("../helpers/shortcuts");
-const { EVENTS_PREFERENCES } = require("../shared/constants");
-
-let win;
+const { EVENTS_PREFERENCES, EVENTS_CODE } = require("../shared/constants");
 
 const createMainWindow = async () => {
-  win = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 1010,
     height: 720,
     icon: path.join(__dirname, "..", "public", "icons", "icon.png"),
@@ -27,33 +16,27 @@ const createMainWindow = async () => {
     },
   });
 
-  nativeTheme.themeSource = themeApp();
-  buildTemplateMenu(win);
+  buildTemplateMenu(mainWindow);
 
-  win.loadFile("src/views/index.html");
+  mainWindow.loadFile("src/views/index.html");
 
-  win.webContents.on("did-finish-load", () => {
-    win.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
-    win.webContents.send(EVENTS_PREFERENCES.SET_COLOR, colorTextApp());
-    win.webContents.setZoomFactor(zoomApp());
-    win.webContents.send("set-editor-type", {
-      editorType: editorTypeApp(),
-      editorName: editorNameApp(),
-    });
-    win.webContents.send("set-theme-code", themeAppCode());
-    win.webContents.send(EVENTS_PREFERENCES.SET_FONT, fontApp());
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.webContents.setZoomFactor(zoomApp());
+    mainWindow.webContents.send(
+      EVENTS_CODE.SET_EDITOR_LANGUAGE,
+      editorLanguage()
+    );
+    mainWindow.webContents.send(EVENTS_PREFERENCES.SET_THEME, themeApp());
   });
 
-  win.on("close", (event) => {
+  mainWindow.on("close", (event) => {
     event.preventDefault();
-    dialogConfirmExit(win);
+    dialogConfirmExit(mainWindow);
   });
 
-  shortcuts(win);
-  ipcMainEventsTerminal(win);
+  shortcuts(mainWindow);
 };
 
 module.exports = {
   createMainWindow,
-  win,
 };
