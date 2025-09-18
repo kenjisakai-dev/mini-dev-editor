@@ -71,11 +71,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "javascript",
         enabled: editorNameApp() === "javascript" ? false : true,
         click: async () => {
-          if (
-            ["text", "text/typescript", "python", "text/x-csharp"].includes(
-              editorNameApp()
-            )
-          ) {
+          const types = ["text", "text/typescript", "python", "text/x-csharp"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -90,11 +87,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text/typescript",
         enabled: editorNameApp() === "text/typescript" ? false : true,
         click: async () => {
-          if (
-            ["text", "javascript", "python", "text/x-csharp"].includes(
-              editorNameApp()
-            )
-          ) {
+          const types = ["text", "javascript", "python", "text/x-csharp"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -109,11 +103,13 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "python",
         enabled: editorNameApp() === "python" ? false : true,
         click: async () => {
-          if (
-            ["text", "javascript", "text/typescript", "text/x-csharp"].includes(
-              editorNameApp()
-            )
-          ) {
+          const types = [
+            "text",
+            "javascript",
+            "text/typescript",
+            "text/x-csharp",
+          ];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -128,11 +124,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text/x-csharp",
         enabled: editorNameApp() === "text/x-csharp" ? false : true,
         click: async () => {
-          if (
-            ["text", "javascript", "text/typescript", "python"].includes(
-              editorNameApp()
-            )
-          ) {
+          const types = ["text", "javascript", "text/typescript", "python"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -154,7 +147,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "powershell.exe",
         enabled: editorNameApp() === "powershell.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
+          const types = ["text", "javascript", "python"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -169,7 +163,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "pwsh.exe",
         enabled: editorNameApp() === "pwsh.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
+          const types = ["text", "javascript", "python"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -184,7 +179,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "cmd.exe",
         enabled: editorNameApp() === "cmd.exe" ? false : true,
         click: async () => {
-          if (["text", "javascript", "python"].includes(editorNameApp())) {
+          const types = ["text", "javascript", "python"];
+          if (types.includes(editorNameApp())) {
             await dialogNewFile(win);
           }
 
@@ -279,9 +275,7 @@ const buildTemplateMenu = (win) => {
         accelerator: "CmdOrCtrl+=",
         enabled: permissionZoomIn(),
         click: () => {
-          const zoom = zoomIn();
-          win.webContents.setZoomFactor(zoom);
-          setZoomApp(zoom);
+          setZoomApp(win, zoomIn());
           buildTemplateMenu(win);
         },
         icon: getIconTheme("zoom-in"),
@@ -291,9 +285,7 @@ const buildTemplateMenu = (win) => {
         accelerator: "CmdOrCtrl+-",
         enabled: permissionZoomOut(),
         click: () => {
-          const zoom = zoomOut();
-          win.webContents.setZoomFactor(zoom);
-          setZoomApp(zoom);
+          setZoomApp(win, zoomOut());
           buildTemplateMenu(win);
         },
         icon: getIconTheme("zoom-out"),
@@ -305,8 +297,7 @@ const buildTemplateMenu = (win) => {
         label: "Restaurar zoom",
         accelerator: "CmdOrCtrl+0",
         click: () => {
-          win.webContents.setZoomFactor(zoomAppDefault());
-          setZoomApp(zoomAppDefault());
+          setZoomApp(win, zoomAppDefault());
           buildTemplateMenu(win);
         },
         icon: getIconTheme("reset"),

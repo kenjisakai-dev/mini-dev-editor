@@ -1,9 +1,10 @@
 const { zoomApp } = require("../config/config");
 const { store } = require("./store");
 
-const setZoomApp = (zoomCurrent) => {
+const setZoomApp = (win, zoom) => {
   try {
-    store.set("preferences.zoomApp", zoomCurrent);
+    store.set("preferences.zoomApp", zoom);
+    win.webContents.setZoomFactor(zoom);
   } catch (err) {
     console.error(`Erro ao mudar zoom: ${err?.message}`);
   }
