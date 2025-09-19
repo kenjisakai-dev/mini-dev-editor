@@ -51,10 +51,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text",
         enabled: editorNameApp() === "text" ? false : true,
         click: async () => {
-          if (editorTypeApp() === "code") await dialogNewFile(win);
-
+          await dialogNewFile(win);
           await setEditorType(win, "txt", "text");
-          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -71,13 +69,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "javascript",
         enabled: editorNameApp() === "javascript" ? false : true,
         click: async () => {
-          const types = ["text", "text/typescript", "python", "text/x-csharp"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "code", "javascript");
-          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -87,13 +80,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text/typescript",
         enabled: editorNameApp() === "text/typescript" ? false : true,
         click: async () => {
-          const types = ["text", "javascript", "python", "text/x-csharp"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "code", "text/typescript");
-          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -103,18 +91,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "python",
         enabled: editorNameApp() === "python" ? false : true,
         click: async () => {
-          const types = [
-            "text",
-            "javascript",
-            "text/typescript",
-            "text/x-csharp",
-          ];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "code", "python");
-          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -124,13 +102,8 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "text/x-csharp",
         enabled: editorNameApp() === "text/x-csharp" ? false : true,
         click: async () => {
-          const types = ["text", "javascript", "text/typescript", "python"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "code", "text/x-csharp");
-          win.webContents.reload();
           buildTemplateMenu(win);
         },
       },
@@ -147,14 +120,9 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "powershell.exe",
         enabled: editorNameApp() === "powershell.exe" ? false : true,
         click: async () => {
-          const types = ["text", "javascript", "python"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "terminal", "powershell.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
@@ -163,14 +131,9 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "pwsh.exe",
         enabled: editorNameApp() === "pwsh.exe" ? false : true,
         click: async () => {
-          const types = ["text", "javascript", "python"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "terminal", "pwsh.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
       {
@@ -179,14 +142,9 @@ const buildTemplateMenu = (win) => {
         checked: editorNameApp() === "cmd.exe",
         enabled: editorNameApp() === "cmd.exe" ? false : true,
         click: async () => {
-          const types = ["text", "javascript", "python"];
-          if (types.includes(editorNameApp())) {
-            await dialogNewFile(win);
-          }
-
+          await dialogNewFile(win);
           await setEditorType(win, "terminal", "cmd.exe");
           buildTemplateMenu(win);
-          win.webContents.reload();
         },
       },
     ],

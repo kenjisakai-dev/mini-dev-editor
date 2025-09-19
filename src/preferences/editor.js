@@ -9,6 +9,7 @@ const setEditorType = async (win, editorType, editorName) => {
     });
     store.set("preferences.editorTypeApp", editorType);
     store.set("preferences.editorNameApp", editorName);
+    win.webContents.reload();
   } catch (err) {
     console.error(`Erro ao mudar editor: ${err?.message}`);
   }
