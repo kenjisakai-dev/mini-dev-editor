@@ -7,6 +7,7 @@ export interface Settings {
   colorText: ColorText
   theme: Theme
   font: Font
+  zoom: number
 }
 
 export const store = new Store<Settings>({
@@ -14,6 +15,7 @@ export const store = new Store<Settings>({
   defaults: {
     colorText: 'lightGrey',
     theme: 'system',
-    font: 'Inter'
+    font: 'Inter',
+    zoom: 1.2
   }
 })

@@ -4,6 +4,14 @@ import { setColorText } from '@main/preferences/color'
 import config from '@main/preferences/config'
 import { setTheme } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
+import {
+  permissionZoomIn,
+  permissionZoomOut,
+  setZoom,
+  zoomAppDefault,
+  zoomIn,
+  zoomOut
+} from '../preferences/zoom'
 
 export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const getIcon = (icon: string) => {
@@ -252,11 +260,49 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
       }
     ]
   })
+  const menuZoom = new MenuItem({
+    label: 'Zoom',
+    submenu: [
+      {
+        label: 'Aplicar zoom',
+        accelerator: 'CmdOrCtrl+=',
+        enabled: permissionZoomIn(),
+        click: () => {
+          setZoom(mainWindow, zoomIn())
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('zoom-in')
+      },
+      {
+        label: 'Reduzir zoom',
+        accelerator: 'CmdOrCtrl+-',
+        enabled: permissionZoomOut(),
+        click: () => {
+          setZoom(mainWindow, zoomOut())
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('zoom-out')
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Restaurar zoom',
+        accelerator: 'CmdOrCtrl+0',
+        click: () => {
+          setZoom(mainWindow, zoomAppDefault())
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('reset')
+      }
+    ]
+  })
 
   templateMenu.append(menuEditor)
   templateMenu.append(menuColor)
   templateMenu.append(menuTheme)
   templateMenu.append(menuFont)
+  templateMenu.append(menuZoom)
 
   Menu.setApplicationMenu(templateMenu)
 }
