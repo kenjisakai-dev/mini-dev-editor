@@ -1,14 +1,18 @@
 import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import icon from '@/resources/icon.png?asset'
+import { mainWindowMenu } from '@main/menu/mainWindowMenu'
+import config from '@main/preferences/config'
+import { setColorText } from '@main/preferences/color'
+import { setTheme } from '@main/preferences/theme'
+import { setFont } from '@main/preferences/font'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
-    autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -25,6 +29,14 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindowMenu(mainWindow)
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    setColorText(mainWindow, config.getColorText())
+    setTheme(mainWindow, config.getTheme())
+    setFont(mainWindow, config.getFont())
+  })
 }
 
 app.whenReady().then(() => {

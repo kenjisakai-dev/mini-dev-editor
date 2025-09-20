@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+:root {
+  --background: #1f1f1f;
+  --lightGrey: #d6d6d6;
+  --yellow: #e5b567;
+  --blue: #9cdcfe;
+  --grey: #858585;
+  --orange: #e87d3e;
+  --pink: #b05279;
+  --purple: #9e86c8;
+  --green: #b4d273;
+}
+
+.light {
+  --background: #fff;
+  --lightGrey: #3d3d3d;
+}
+
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#container,
+#txtEditor {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#txtEditor {
+  background-color: var(--background);
+}
+
+#txtEditor * {
+  padding-top: 10px;
+  font-family: 'Inter';
+  color: var(--lightGrey);
+  background-color: var(--background);
+  font-size: 1.1em;
+}
+
+#linhas {
+  height: 100%;
+  width: 8%;
+  float: left;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 20px;
+  overflow-y: auto;
+  overflow: hidden;
+}
+
+#txtArea {
+  height: 100%;
+  width: 92%;
+  resize: none;
+}
+
+#txtArea:focus {
+  outline: none;
+}
+
+#sobre {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: var(--background);
+  color: var(--lightGrey);
+}
+
+#sobre h1 {
+  font-size: 1.2em;
+}
