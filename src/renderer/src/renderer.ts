@@ -38,4 +38,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.fontFamily = font
     area.style.fontFamily = font
   })
+
+  // Atualizar conteúdo do arquivo
+  area.addEventListener('keyup', () => {
+    window.api.updateContent(area.value)
+  })
+
+  // Sincronizar scroll da numeração de linhas com o textarea
+  area.addEventListener('scroll', () => {
+    linha.scrollTop = area.scrollTop
+  })
+
+  // Receber conteúdo do arquivo
+  window.api.setFile(({ name, content }) => {
+    const title = document.querySelector('title') as HTMLTitleElement
+
+    if (name === '') {
+      title.innerHTML = `Mini Dev Editor`
+    } else {
+      title.innerHTML = `${name} - Mini Dev Editor`
+    }
+
+    area.value = content
+    numerarLinhas()
+  })
 })

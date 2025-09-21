@@ -12,6 +12,7 @@ import {
   zoomIn,
   zoomOut
 } from '../preferences/zoom'
+import { newFile, openFile, saveFile } from '../helpers/contentFile'
 
 export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const getIcon = (icon: string) => {
@@ -26,6 +27,35 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
 
   const templateMenu = Menu.buildFromTemplate([])
 
+  const menuFile = new MenuItem({
+    label: 'Arquivo',
+    submenu: [
+      {
+        label: 'Novo',
+        accelerator: 'CmdOrCtrl+N',
+        click: () => newFile(mainWindow),
+        icon: getIconTheme('new-file')
+      },
+      {
+        label: 'Abrir',
+        accelerator: 'CmdOrCtrl+O',
+        click: () => openFile(mainWindow),
+        icon: getIconTheme('open-file')
+      },
+      {
+        label: 'Salvar',
+        accelerator: 'CmdOrCtrl+S',
+        click: () => saveFile(mainWindow, false),
+        icon: getIconTheme('save-file')
+      },
+      {
+        label: 'Salvar Como',
+        accelerator: 'CmdOrCtrl+Shift+S',
+        click: () => saveFile(mainWindow, true),
+        icon: getIconTheme('save-as-file')
+      }
+    ]
+  })
   const menuEditor = new MenuItem({
     label: 'Editor',
     submenu: [
@@ -298,6 +328,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
     ]
   })
 
+  templateMenu.append(menuFile)
   templateMenu.append(menuEditor)
   templateMenu.append(menuColor)
   templateMenu.append(menuTheme)
