@@ -246,7 +246,8 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
         },
         type: 'checkbox',
         checked: config.getFont() === 'Inter',
-        enabled: config.getFont() !== 'Inter'
+        enabled: config.getFont() !== 'Inter',
+        icon: getIconTheme('language')
       },
       {
         label: 'Source Code Pro',
@@ -256,7 +257,8 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
         },
         type: 'checkbox',
         checked: config.getFont() === 'Source Code Pro',
-        enabled: config.getFont() !== 'Source Code Pro'
+        enabled: config.getFont() !== 'Source Code Pro',
+        icon: getIconTheme('language')
       },
       {
         label: 'Bebas Neue',
@@ -266,7 +268,8 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
         },
         type: 'checkbox',
         checked: config.getFont() === 'Bebas Neue',
-        enabled: config.getFont() !== 'Bebas Neue'
+        enabled: config.getFont() !== 'Bebas Neue',
+        icon: getIconTheme('language')
       },
       {
         label: 'Arial',
@@ -276,7 +279,8 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
         },
         type: 'checkbox',
         checked: config.getFont() === 'Arial',
-        enabled: config.getFont() !== 'Arial'
+        enabled: config.getFont() !== 'Arial',
+        icon: getIconTheme('language')
       },
       {
         type: 'separator'
@@ -339,12 +343,20 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
     ]
   })
 
+  const preferencesSubmenu = new Menu()
+  preferencesSubmenu.append(menuColor)
+  preferencesSubmenu.append(menuTheme)
+  preferencesSubmenu.append(menuFont)
+  preferencesSubmenu.append(menuZoom)
+
+  const menuPreferences = new MenuItem({
+    label: 'Preferências',
+    submenu: preferencesSubmenu
+  })
+
   templateMenu.append(menuFile)
   templateMenu.append(menuEditor)
-  templateMenu.append(menuColor)
-  templateMenu.append(menuTheme)
-  templateMenu.append(menuFont)
-  templateMenu.append(menuZoom)
+  templateMenu.append(menuPreferences)
   templateMenu.append(menuHelp)
 
   Menu.setApplicationMenu(templateMenu)
