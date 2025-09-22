@@ -3,7 +3,7 @@ import IPC_HANDLER from '@main/shared/constants/ipcHandler'
 import { ColorText } from '@main/shared/types/colorText'
 import { Theme } from '@main/shared/types/theme'
 import { Font } from '@main/shared/types/font'
-import { FileContent } from '../main/helpers/contentFile'
+import { FileContent } from '@main/shared/interfaces/fileContent'
 
 export const api = {
   setColorText: (callback: (color: ColorText) => void) =>

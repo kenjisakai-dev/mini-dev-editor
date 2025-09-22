@@ -8,6 +8,8 @@
     "paths": {
       "@/*": ["*"],
       "@main/*": ["src/main/*"],
+      "@preload/*": ["src/preload/*"],
+      "@renderer/*": ["src/renderer/*"],
       "@tests/*": ["tests/*"]
     },
     "esModuleInterop": true

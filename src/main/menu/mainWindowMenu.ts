@@ -11,9 +11,9 @@ import {
   zoomAppDefault,
   zoomIn,
   zoomOut
-} from '../preferences/zoom'
-import { newFile, openFile, saveFile } from '../helpers/contentFile'
-import { createAboutWindow } from '../pages/aboutWindow'
+} from '@main/preferences/zoom'
+import { newFile, openFile, saveFile } from '@main/helpers/contentFile'
+import { createAboutWindow } from '@main/pages/aboutWindow'
 
 export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const getIcon = (icon: string) => {

@@ -6,7 +6,7 @@ import config from '@main/preferences/config'
 import { setColorText } from '@main/preferences/color'
 import { setTheme } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
-import { dialogConfirmExit } from '@main/helpers/contentFile'
+import { dialogConfirmExit } from '@main/helpers/dialogs/dialogConfirm'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
