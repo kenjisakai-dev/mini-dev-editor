@@ -1,7 +1,6 @@
 import { app, BrowserWindow, globalShortcut } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '@/resources/icon.png?asset'
 import { mainWindowMenu } from '@main/menu/mainWindowMenu'
 import config from '@main/preferences/config'
 import { setColorText } from '@main/preferences/color'
@@ -14,7 +13,7 @@ function createWindow(): void {
     width: 900,
     height: 670,
     show: false,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    icon: path.join(__dirname, '../../resources/icon.png'),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
