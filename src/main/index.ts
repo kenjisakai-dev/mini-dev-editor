@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '@/resources/icon.png?asset'
@@ -7,6 +7,7 @@ import config from '@main/preferences/config'
 import { setColorText } from '@main/preferences/color'
 import { setTheme } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
+import { dialogConfirmExit } from '@main/helpers/contentFile'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -30,12 +31,31 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  mainWindowMenu(mainWindow)
-
   mainWindow.webContents.on('did-finish-load', () => {
     setColorText(mainWindow, config.getColorText())
     setTheme(mainWindow, config.getTheme())
     setFont(mainWindow, config.getFont())
+
+    mainWindowMenu(mainWindow)
+  })
+
+  mainWindow.on('close', (event) => {
+    event.preventDefault()
+    dialogConfirmExit(mainWindow)
+  })
+
+  app.on('browser-window-focus', () => {
+    globalShortcut.register('CommandOrControl+I', () => {
+      mainWindow.webContents.toggleDevTools()
+    })
+
+    globalShortcut.register('CommandOrControl+R', () => {
+      mainWindow.webContents.reload()
+    })
+  })
+
+  app.on('browser-window-blur', () => {
+    globalShortcut.unregisterAll()
   })
 }
 

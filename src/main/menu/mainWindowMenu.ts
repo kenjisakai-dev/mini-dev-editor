@@ -13,6 +13,7 @@ import {
   zoomOut
 } from '../preferences/zoom'
 import { newFile, openFile, saveFile } from '../helpers/contentFile'
+import { createAboutWindow } from '../pages/aboutWindow'
 
 export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const getIcon = (icon: string) => {
@@ -327,6 +328,16 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
       }
     ]
   })
+  const menuHelp = new MenuItem({
+    label: 'Ajuda',
+    submenu: [
+      {
+        label: 'Sobre',
+        click: () => createAboutWindow(),
+        icon: getIconTheme('about-window')
+      }
+    ]
+  })
 
   templateMenu.append(menuFile)
   templateMenu.append(menuEditor)
@@ -334,6 +345,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   templateMenu.append(menuTheme)
   templateMenu.append(menuFont)
   templateMenu.append(menuZoom)
+  templateMenu.append(menuHelp)
 
   Menu.setApplicationMenu(templateMenu)
 }

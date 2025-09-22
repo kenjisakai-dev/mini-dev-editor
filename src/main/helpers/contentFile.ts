@@ -119,6 +119,29 @@ export async function saveFile(mainWindow: BrowserWindow, saveAs: boolean) {
   return true
 }
 
+export async function dialogConfirmExit(mainWindow: BrowserWindow) {
+  const fileContent = getFileContent()
+
+  if (fileContent.content === '' || fileContent.currentSaved) {
+    return mainWindow.destroy()
+  }
+
+  const dialogConfirm = await dialog.showMessageBox({
+    title: 'Salvar',
+    message: 'Deseja salvar o conteúdo antes de sair ?',
+    type: 'question',
+    buttons: ['Sim', 'Não'],
+    defaultId: 0,
+    cancelId: 1
+  })
+
+  if (dialogConfirm.response === 1) return mainWindow.destroy()
+
+  const fileSaved = await saveFile(mainWindow, false)
+
+  if (fileSaved) return mainWindow.destroy()
+}
+
 function getExtensions() {
   return [
     {
