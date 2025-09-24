@@ -18,6 +18,7 @@ export class MockBrowserWindow {
   webContents = {
     send: jest.fn()
   }
+  destroy = jest.fn(() => {})
 }
 
 ;(global as any).mainWindow = new MockBrowserWindow()

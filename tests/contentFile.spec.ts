@@ -104,6 +104,10 @@ describe('contentFile', () => {
       contentFile.getFileContent().content = 'Salvar conteúdo como'
       const res = await contentFile.saveFile(global.mainWindow, true)
 
+      // Verificar se o arquivo foi realmente criado com o conteúdo correto
+      expect(fs.existsSync('tests/mocks/fileSave.txt')).toEqual(true)
+      expect(fs.readFileSync('tests/mocks/fileSave.txt', 'utf-8')).toEqual('Salvar conteúdo como')
+
       expect(res).toEqual(true)
       expect(contentFile.getFileContent()).toEqual({
         name: 'fileSave.txt',
