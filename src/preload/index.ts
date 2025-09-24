@@ -5,29 +5,32 @@ import { Theme } from '@main/shared/types/theme'
 import { Font } from '@main/shared/types/font'
 import { FileContent } from '@main/shared/interfaces/fileContent'
 
-export const api = {
-  setColorText: (callback: (color: ColorText) => void) =>
-    ipcRenderer.on(IPC_HANDLER.SET_COLOR, (_event, color: ColorText) => callback(color)),
+export interface API {
+  setColorText: (callback: (color: ColorText) => void) => void
+  setTheme: (callback: (theme: Theme) => void) => void
+  setFont: (callback: (font: Font) => void) => void
+  setFile: (callback: (file: FileContent) => void) => void
+  updateContent: (content: string) => void
+}
 
-  setTheme: (callback: (theme: Theme) => void) =>
-    ipcRenderer.on(IPC_HANDLER.SET_THEME, (_event, theme: Theme) => callback(theme)),
+export const api: API = {
+  setColorText: (callback: (color: ColorText) => void) => {
+    ipcRenderer.on(IPC_HANDLER.SET_COLOR, (_event, color: ColorText) => callback(color))
+  },
 
-  setFont: (callback: (font: Font) => void) =>
-    ipcRenderer.on(IPC_HANDLER.SET_FONT, (_event, font: Font) => callback(font)),
+  setTheme: (callback: (theme: Theme) => void) => {
+    ipcRenderer.on(IPC_HANDLER.SET_THEME, (_event, theme: Theme) => callback(theme))
+  },
 
-  setFile: (callback: (file: FileContent) => void) =>
-    ipcRenderer.on(IPC_HANDLER.SET_FILE, (_event, file: FileContent) => callback(file)),
+  setFont: (callback: (font: Font) => void) => {
+    ipcRenderer.on(IPC_HANDLER.SET_FONT, (_event, font: Font) => callback(font))
+  },
+
+  setFile: (callback: (file: FileContent) => void) => {
+    ipcRenderer.on(IPC_HANDLER.SET_FILE, (_event, file: FileContent) => callback(file))
+  },
 
   updateContent: (content: string) => ipcRenderer.send(IPC_HANDLER.UPDATE_CONTENT, content)
 }
 
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    console.error(error)
-  }
-} else {
-  // @ts-ignore (define in dts)
-  window.api = api
-}
+contextBridge.exposeInMainWorld('api', api)

@@ -29,7 +29,5 @@ export function createAboutWindow() {
       setTheme(aboutWindow, config.getTheme())
       aboutWindow.show()
     })
-
-    aboutWindow.webContents.openDevTools()
   }
 }
