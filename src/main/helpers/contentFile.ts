@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
-import { dialogSaveFileBox, dialogSelectFileBox } from '@main/helpers/dialogs/dialogFile'
+import { dialogSaveFileBox, dialogSelectFileBox } from '@main/helpers/dialogs/dialogBox'
 import { FileContent } from '@main/shared/interfaces/fileContent'
 import { dialogSaveFile } from '@main/helpers/dialogs/dialogConfirm'
 

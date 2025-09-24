@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron'
 import { getFileContent, saveFile } from '@main/helpers/contentFile'
-import { dialogQuestionBox } from '@main/helpers/dialogs/dialogFile'
+import { dialogQuestionBox } from '@main/helpers/dialogs/dialogBox'
 
 export async function dialogConfirmExit(mainWindow: BrowserWindow) {
   const fileContent = getFileContent()
