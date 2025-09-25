@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { mainWindowMenu } from '@main/menu/mainWindowMenu'
 import config from '@main/preferences/config'
 import { setColorText } from '@main/preferences/color'
-import { setTheme } from '@main/preferences/theme'
+import { setTheme, setThemeCode } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
 import { dialogConfirmExit } from '@main/helpers/dialogs/dialogConfirm'
 import { setEditor } from '@main/preferences/editor'
@@ -32,10 +32,11 @@ function createWindow(): void {
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
+    setEditor(mainWindow, config.getEditor())
     setColorText(mainWindow, config.getColorText())
     setTheme(mainWindow, config.getTheme())
+    setThemeCode(mainWindow, config.getThemeCode())
     setFont(mainWindow, config.getFont())
-    setEditor(mainWindow, config.getEditor())
 
     mainWindowMenu(mainWindow)
   })

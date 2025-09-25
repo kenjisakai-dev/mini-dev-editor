@@ -1,4 +1,5 @@
 import { app, dialog } from 'electron'
+import config from '@main/preferences/config'
 
 export async function dialogQuestionBox(message: string) {
   return await dialog.showMessageBox({
@@ -30,12 +31,34 @@ export async function dialogSelectFileBox(title: string) {
 function getExtensions() {
   return [
     {
+      name: 'JavaScript',
+      extensions: ['js'],
+      editorName: 'javascript'
+    },
+    {
+      name: 'TypeScript',
+      extensions: ['ts'],
+      editorName: 'text/typescript'
+    },
+    {
+      name: 'Python',
+      extensions: ['py'],
+      editorName: 'python'
+    },
+    {
+      name: 'C#',
+      extensions: ['cs'],
+      editorName: 'text/x-csharp'
+    },
+    {
       name: 'Arquivos de Texto',
-      extensions: ['txt']
+      extensions: ['txt'],
+      editorName: 'text'
     },
     {
       name: 'Todos os arquivos',
-      extensions: ['*']
+      extensions: ['*'],
+      editorName: 'text'
     }
-  ]
+  ].filter((item) => item.editorName === config.getEditor().name)
 }
