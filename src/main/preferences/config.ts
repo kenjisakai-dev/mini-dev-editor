@@ -3,6 +3,8 @@ import { store } from '@main/store/store'
 export default {
   getColorText: () => store.get('colorText', 'lightGrey'),
   getTheme: () => store.get('theme', 'system'),
+  getThemeCode: () => store.get('themeCode', 'material-darker'),
   getFont: () => store.get('font', 'Inter'),
-  getZoom: () => store.get('zoom', 1.2)
+  getZoom: () => store.get('zoom', 1.2),
+  getEditor: () => store.get('editor', { type: 'text', name: 'txt' })
 }

@@ -1,57 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Foco no textarea
-  const area = document.getElementById('txtArea') as HTMLTextAreaElement
-  area.focus()
+  const txtEditor = document.getElementById('txtEditor') as HTMLDivElement
+  const codeEditor = document.getElementById('codeEditor') as HTMLDivElement
 
-  // Numeração de linhas
-  const linha = document.getElementById('linhas') as HTMLDivElement
-  numerarLinhas()
-
-  function numerarLinhas() {
-    let linhaNumerada = ''
-    let listaLinhas = area.value.split('\n')
-
-    for (let i = 1; i <= listaLinhas.length; i++) {
-      linhaNumerada += i + '<br>'
+  window.api.setEditor(({ type }) => {
+    if (type === 'code') {
+      txtEditor.style.display = 'none'
+      codeEditor.style.display = 'block'
     }
 
-    linha.innerHTML = linhaNumerada
-  }
-
-  area.addEventListener('input', () => {
-    numerarLinhas()
+    if (type === 'text') {
+      txtEditor.style.display = 'block'
+      codeEditor.style.display = 'none'
+    }
   })
 
-  // Alterar cor do texto
-  window.api.setColorText((color) => {
-    area.style.color = `var(--${color})`
-  })
-
-  // Alterar tema
   window.api.setTheme((theme) => {
     const htmlRoot = document.documentElement
     htmlRoot.classList.toggle('light', theme === 'light')
   })
 
-  // Alterar fonte
-  window.api.setFont((font) => {
-    document.body.style.fontFamily = font
-    area.style.fontFamily = font
-  })
-
-  // Atualizar conteúdo do arquivo
-  area.addEventListener('keyup', () => {
-    window.api.updateContent(area.value)
-  })
-
-  // Sincronizar scroll da numeração de linhas com o textarea
-  area.addEventListener('scroll', () => {
-    linha.scrollTop = area.scrollTop
-  })
-
-  // Receber conteúdo do arquivo
   window.api.setFile(({ name, content }) => {
     const title = document.querySelector('title') as HTMLTitleElement
+    const area = document.getElementById('txtArea') as HTMLTextAreaElement
 
     if (name === '') {
       title.innerHTML = `Mini Dev Editor`
@@ -60,6 +30,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     area.value = content
-    numerarLinhas()
   })
 })

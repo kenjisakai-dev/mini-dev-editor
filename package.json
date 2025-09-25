@@ -24,6 +24,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@types/codemirror": "^5.60.16",
+    "codemirror": "^5.65.20",
     "electron-store": "^8.2.0"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@ import { setColorText } from '@main/preferences/color'
 import { setTheme } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
 import { dialogConfirmExit } from '@main/helpers/dialogs/dialogConfirm'
+import { setEditor } from '@main/preferences/editor'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -34,6 +35,7 @@ function createWindow(): void {
     setColorText(mainWindow, config.getColorText())
     setTheme(mainWindow, config.getTheme())
     setFont(mainWindow, config.getFont())
+    setEditor(mainWindow, config.getEditor())
 
     mainWindowMenu(mainWindow)
   })
