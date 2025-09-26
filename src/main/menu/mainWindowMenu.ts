@@ -266,7 +266,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
       : { visible: false }
   )
   const menuTheme = new MenuItem(
-    ['text'].includes(config.getEditor().type)
+    ['text', 'code'].includes(config.getEditor().type)
       ? {
           label: 'Tema',
           submenu: [
@@ -307,8 +307,12 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
             }
           ]
         }
-      : {
-          label: 'Tema',
+      : { visible: false }
+  )
+  const menuThemeCode = new MenuItem(
+    ['code'].includes(config.getEditor().type)
+      ? {
+          label: 'Tema do Código',
           submenu: [
             {
               label: 'Material Darker',
@@ -372,6 +376,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
             }
           ]
         }
+      : { visible: false }
   )
   const menuFont = new MenuItem(
     ['text'].includes(config.getEditor().type)
@@ -496,6 +501,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
 
   const preferencesSubmenu = new Menu()
   preferencesSubmenu.append(menuTheme)
+  preferencesSubmenu.append(menuThemeCode)
   preferencesSubmenu.append(menuColor)
   preferencesSubmenu.append(menuFont)
   preferencesSubmenu.append(menuZoom)

@@ -53,12 +53,12 @@ function getExtensions() {
     {
       name: 'Arquivos de Texto',
       extensions: ['txt'],
-      editorName: 'text'
+      editorName: 'txt'
     },
     {
       name: 'Todos os arquivos',
       extensions: ['*'],
-      editorName: 'text'
+      editorName: 'txt'
     }
   ].filter((item) => item.editorName === config.getEditor().name)
 }
