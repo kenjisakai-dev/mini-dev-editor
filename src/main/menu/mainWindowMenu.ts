@@ -94,82 +94,128 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
       }
     ]
   })
-  const menuFile = new MenuItem({
-    label: 'Arquivo',
+  const menuTerminalEditor = new MenuItem({
+    label: 'Terminal',
     submenu: [
       {
-        label: 'Novo',
-        accelerator: 'CmdOrCtrl+N',
-        click: () => newFile(mainWindow),
-        icon: getIconTheme('new-file')
+        label: 'Powershell 5',
+        type: 'checkbox',
+        checked: config.getEditor().name === 'powershell.exe',
+        enabled: config.getEditor().name !== 'powershell.exe',
+        click: async () => {
+          await newFile(mainWindow)
+          await setEditor(mainWindow, { type: 'terminal', name: 'powershell.exe' })
+          mainWindowMenu(mainWindow)
+        }
       },
       {
-        label: 'Abrir',
-        accelerator: 'CmdOrCtrl+O',
-        click: () => openFile(mainWindow),
-        icon: getIconTheme('open-file')
+        label: 'Powershell 7',
+        type: 'checkbox',
+        checked: config.getEditor().name === 'pwsh.exe',
+        enabled: config.getEditor().name !== 'pwsh.exe',
+        click: async () => {
+          await newFile(mainWindow)
+          await setEditor(mainWindow, { type: 'terminal', name: 'pwsh.exe' })
+          mainWindowMenu(mainWindow)
+        }
       },
       {
-        label: 'Salvar',
-        accelerator: 'CmdOrCtrl+S',
-        click: () => saveFile(mainWindow, false),
-        icon: getIconTheme('save-file')
-      },
-      {
-        label: 'Salvar Como',
-        accelerator: 'CmdOrCtrl+Shift+S',
-        click: () => saveFile(mainWindow, true),
-        icon: getIconTheme('save-as-file')
+        label: 'CMD',
+        type: 'checkbox',
+        checked: config.getEditor().name === 'cmd.exe',
+        enabled: config.getEditor().name !== 'cmd.exe',
+        click: async () => {
+          await newFile(mainWindow)
+          await setEditor(mainWindow, { type: 'terminal', name: 'cmd.exe' })
+          mainWindowMenu(mainWindow)
+        }
       }
     ]
   })
-  const menuEditor = new MenuItem({
-    label: 'Editor',
-    submenu: [
-      {
-        label: 'Desfazer',
-        role: 'undo',
-        icon: getIconTheme('undo')
-      },
-      {
-        label: 'Refazer',
-        role: 'redo',
-        accelerator: 'CmdOrCtrl+Y',
-        icon: getIconTheme('redo')
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Recortar',
-        role: 'cut',
-        icon: getIconTheme('cut')
-      },
-      {
-        label: 'Copiar',
-        role: 'copy',
-        accelerator: 'CmdOrCtrl+C',
-        icon: getIconTheme('copy')
-      },
-      {
-        label: 'Colar',
-        role: 'paste',
-        accelerator: 'CmdOrCtrl+V',
-        icon: getIconTheme('paste')
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Recarregar',
-        role: 'reload',
-        accelerator: 'CmdOrCtrl+R',
-        icon: getIconTheme('reload')
-      }
-    ]
-  })
+  const menuFile = new MenuItem(
+    ['text', 'code'].includes(config.getEditor().type)
+      ? {
+          label: 'Arquivo',
+          submenu: [
+            {
+              label: 'Novo',
+              accelerator: 'CmdOrCtrl+N',
+              click: () => newFile(mainWindow),
+              icon: getIconTheme('new-file')
+            },
+            {
+              label: 'Abrir',
+              accelerator: 'CmdOrCtrl+O',
+              click: () => openFile(mainWindow),
+              icon: getIconTheme('open-file')
+            },
+            {
+              label: 'Salvar',
+              accelerator: 'CmdOrCtrl+S',
+              click: () => saveFile(mainWindow, false),
+              icon: getIconTheme('save-file')
+            },
+            {
+              label: 'Salvar Como',
+              accelerator: 'CmdOrCtrl+Shift+S',
+              click: () => saveFile(mainWindow, true),
+              icon: getIconTheme('save-as-file')
+            }
+          ]
+        }
+      : { visible: false }
+  )
+  const menuEditor = new MenuItem(
+    ['text', 'code'].includes(config.getEditor().type)
+      ? {
+          label: 'Editor',
+          submenu: [
+            {
+              label: 'Desfazer',
+              role: 'undo',
+              icon: getIconTheme('undo')
+            },
+            {
+              label: 'Refazer',
+              role: 'redo',
+              accelerator: 'CmdOrCtrl+Y',
+              icon: getIconTheme('redo')
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Recortar',
+              role: 'cut',
+              icon: getIconTheme('cut')
+            },
+            {
+              label: 'Copiar',
+              role: 'copy',
+              accelerator: 'CmdOrCtrl+C',
+              icon: getIconTheme('copy')
+            },
+            {
+              label: 'Colar',
+              role: 'paste',
+              accelerator: 'CmdOrCtrl+V',
+              icon: getIconTheme('paste')
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Recarregar',
+              role: 'reload',
+              accelerator: 'CmdOrCtrl+R',
+              icon: getIconTheme('reload')
+            }
+          ]
+        }
+      : { visible: false }
+  )
   const menuColor = new MenuItem(
-    ['text'].includes(config.getEditor().type)
+    ['text', 'terminal'].includes(config.getEditor().type)
       ? {
           label: 'Cor',
           submenu: [
@@ -265,50 +311,46 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
         }
       : { visible: false }
   )
-  const menuTheme = new MenuItem(
-    ['text', 'code'].includes(config.getEditor().type)
-      ? {
-          label: 'Tema',
-          submenu: [
-            {
-              label: 'Escuro',
-              type: 'checkbox',
-              checked: config.getTheme() === 'dark',
-              enabled: config.getTheme() !== 'dark',
-              click: () => {
-                setTheme(mainWindow, 'dark')
-                mainWindowMenu(mainWindow)
-              },
-              icon: getIconTheme('moon')
-            },
-            {
-              label: 'Claro',
-              type: 'checkbox',
-              checked: config.getTheme() === 'light',
-              enabled: config.getTheme() !== 'light',
-              click: () => {
-                setTheme(mainWindow, 'light')
-                mainWindowMenu(mainWindow)
-              },
-              icon: getIconTheme('sun')
-            },
-            {
-              type: 'separator'
-            },
-            {
-              label: 'Cor do Sistema',
-              type: 'checkbox',
-              checked: config.getTheme() === 'system',
-              click: () => {
-                setTheme(mainWindow, 'system')
-                mainWindowMenu(mainWindow)
-              },
-              icon: getIconTheme('reset')
-            }
-          ]
-        }
-      : { visible: false }
-  )
+  const menuTheme = new MenuItem({
+    label: 'Tema',
+    submenu: [
+      {
+        label: 'Escuro',
+        type: 'checkbox',
+        checked: config.getTheme() === 'dark',
+        enabled: config.getTheme() !== 'dark',
+        click: () => {
+          setTheme(mainWindow, 'dark')
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('moon')
+      },
+      {
+        label: 'Claro',
+        type: 'checkbox',
+        checked: config.getTheme() === 'light',
+        enabled: config.getTheme() !== 'light',
+        click: () => {
+          setTheme(mainWindow, 'light')
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('sun')
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cor do Sistema',
+        type: 'checkbox',
+        checked: config.getTheme() === 'system',
+        click: () => {
+          setTheme(mainWindow, 'system')
+          mainWindowMenu(mainWindow)
+        },
+        icon: getIconTheme('reset')
+      }
+    ]
+  })
   const menuThemeCode = new MenuItem(
     ['code'].includes(config.getEditor().type)
       ? {
@@ -493,6 +535,7 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const editorSubmenu = new Menu()
   editorSubmenu.append(menuTextEditor)
   editorSubmenu.append(menuCodeEditor)
+  editorSubmenu.append(menuTerminalEditor)
 
   const menuEditorType = new MenuItem({
     label: 'Tipo',

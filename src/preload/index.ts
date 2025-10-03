@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
-import { API } from '@preload/types'
+import { API, TerminalOutput } from '@preload/types'
 import { ColorText } from '@main/shared/types/colorText'
 import { Theme, ThemeCode } from '@main/shared/types/theme'
 import { Font } from '@main/shared/types/font'
@@ -32,7 +32,25 @@ export const api: API = {
     ipcRenderer.on(IPC_HANDLER.SET_FILE, (_event, file: FileContent) => callback(file))
   },
 
-  updateContent: (content: string) => ipcRenderer.send(IPC_HANDLER.UPDATE_CONTENT, content)
+  updateContent: (content: string) => ipcRenderer.send(IPC_HANDLER.UPDATE_CONTENT, content),
+
+  terminalInput: (command: string) => {
+    ipcRenderer.send(IPC_HANDLER.TERMINAL_INPUT, command)
+  },
+
+  terminalOutput: (callback: (output: TerminalOutput) => void) => {
+    ipcRenderer.on(IPC_HANDLER.TERMINAL_OUTPUT, (_event, output: TerminalOutput) =>
+      callback(output)
+    )
+  },
+
+  getHistoryCommands: () => {
+    return ipcRenderer.invoke(IPC_HANDLER.TERMINAL_GET_HISTORY_COMMANDS)
+  },
+
+  appendHistoryCommand: (command: string) => {
+    ipcRenderer.send(IPC_HANDLER.TERMINAL_APPEND_HISTORY_COMMANDS, command)
+  }
 }
 
 contextBridge.exposeInMainWorld('api', api)

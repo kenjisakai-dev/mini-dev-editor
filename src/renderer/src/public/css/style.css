@@ -3,7 +3,28 @@
 :root {
   --background: #1f1f1f;
   --lightGrey: #d6d6d6;
-  --yellow: #e5b567;
+ #terminal {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#terminal .xterm {
+  padding-left: 40px !important;
+  box-sizing: border-box !important;
+}
+
+#terminal .xterm-viewport {
+  width: 100% !important;
+}
+
+#terminal *:focus {
+  outline: none;
+}5b567;
   --blue: #9cdcfe;
   --grey: #858585;
   --orange: #e87d3e;
@@ -74,6 +95,24 @@ body,
 
 .CodeMirror {
   font-size: 18px;
+}
+
+#txtArea:focus {
+  outline: none;
+}
+
+#terminal {
+  display: none;
+  width: 100%;
+  height: 100%;
+  float: left;
+  background-color: var(--background);
+  overflow: hidden;
+  padding-left: 20px;
+}
+
+#terminal *:focus {
+  outline: none;
 }
 
 #about {

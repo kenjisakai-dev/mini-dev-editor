@@ -8,4 +8,9 @@ export type CodeEditor = {
   name: 'javascript' | 'text/typescript' | 'python' | 'text/x-csharp'
 }
 
-export type EditorType = TextEditor | CodeEditor
+export type Terminal = {
+  type: 'terminal'
+  name: 'powershell.exe' | 'pwsh.exe' | 'cmd.exe'
+}
+
+export type EditorType = TextEditor | CodeEditor | Terminal

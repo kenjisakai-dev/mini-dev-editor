@@ -8,6 +8,7 @@ import { setTheme, setThemeCode } from '@main/preferences/theme'
 import { setFont } from '@main/preferences/font'
 import { dialogConfirmExit } from '@main/helpers/dialogs/dialogConfirm'
 import { setEditor } from '@main/preferences/editor'
+import terminal from '@main/terminal'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -40,6 +41,8 @@ function createWindow(): void {
 
     mainWindowMenu(mainWindow)
   })
+
+  terminal(mainWindow)
 
   mainWindow.on('close', (event) => {
     event.preventDefault()

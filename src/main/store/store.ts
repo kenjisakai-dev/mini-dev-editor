@@ -7,10 +7,10 @@ import { EditorType } from '@main/shared/types/editor'
 export interface Settings {
   colorText: ColorText
   theme: Theme
+  themeCode: ThemeCode
   font: Font
   zoom: number
   editor: EditorType
-  themeCode: ThemeCode
 }
 
 export const store = new Store<Settings>({
@@ -18,12 +18,12 @@ export const store = new Store<Settings>({
   defaults: {
     colorText: 'lightGrey',
     theme: 'system',
+    themeCode: 'material-darker',
     font: 'Inter',
     zoom: 1.2,
     editor: {
       type: 'text',
       name: 'txt'
-    },
-    themeCode: 'material-darker'
+    }
   }
 })

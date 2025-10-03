@@ -1,16 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
   const txtEditor = document.getElementById('txtEditor') as HTMLDivElement
   const codeEditor = document.getElementById('codeEditor') as HTMLDivElement
+  const terminal = document.getElementById('terminal') as HTMLDivElement
 
   window.api.setEditor(({ type }) => {
-    if (type === 'code') {
-      txtEditor.style.display = 'none'
-      codeEditor.style.display = 'block'
-    }
-
     if (type === 'text') {
       txtEditor.style.display = 'block'
       codeEditor.style.display = 'none'
+      terminal.style.display = 'none'
+    }
+
+    if (type === 'code') {
+      txtEditor.style.display = 'none'
+      codeEditor.style.display = 'block'
+      terminal.style.display = 'none'
+    }
+
+    if (type === 'terminal') {
+      txtEditor.style.display = 'none'
+      codeEditor.style.display = 'none'
+      terminal.style.display = 'block'
     }
   })
 

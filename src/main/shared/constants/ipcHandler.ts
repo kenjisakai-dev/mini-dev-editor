@@ -6,5 +6,10 @@ export default {
   SET_EDITOR: 'preferences:setEditor',
 
   SET_FILE: 'file:setFile',
-  UPDATE_CONTENT: 'file:updateContent'
+  UPDATE_CONTENT: 'file:updateContent',
+
+  TERMINAL_INPUT: 'terminal:input',
+  TERMINAL_OUTPUT: 'terminal:output',
+  TERMINAL_GET_HISTORY_COMMANDS: 'terminal:getHistoryCommands',
+  TERMINAL_APPEND_HISTORY_COMMANDS: 'terminal:appendHistoryCommands'
 }
