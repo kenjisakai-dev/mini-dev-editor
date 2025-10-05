@@ -30,28 +30,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const fitAddon = new window.FitAddon.FitAddon()
   terminal.loadAddon(fitAddon)
-  
-  // Função para ajustar o terminal
-  const fitTerminal = () => {
-    const terminalElement = document.getElementById('terminal')
-    if (terminalElement && terminalElement.style.display !== 'none') {
-      try {
-        fitAddon.fit()
-      } catch (error) {
-        console.warn('Erro ao ajustar terminal:', error)
-      }
-    }
-  }
-  
   fitAddon.fit()
-
-  window.addEventListener('resize', () => {
-    setTimeout(fitTerminal, 50)
-  })
+  window.addEventListener('resize', () => fitAddon.fit())
 
   terminal.prompt = () => {
     terminal.write('\r\n> ')
   }
+
+  terminal.clear()
+  terminal.prompt()
 
   let key = ''
   let command = ''
@@ -79,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let historyCommands = await window.api.getHistoryCommands()
   let historyIndex = historyCommands.length
 
-  terminal.onKey((event) => {
+  terminal.onKey((event: { key: string; domEvent: KeyboardEvent }) => {
     const ev = event.domEvent
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey
     key = ev.key
@@ -99,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function enterCommand() {
     window.api.terminalInput(command)
-    await window.api.appendHistoryCommand(command)
+    window.api.appendHistoryCommand(command)
     historyCommands = await window.api.getHistoryCommands()
     historyIndex = historyCommands.length
     command = ''
@@ -187,46 +174,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     terminal.write(message)
+
     if (finished) {
       terminal.write('\r\n')
       terminal.prompt()
+      terminal.scrollToBottom()
+      fitAddon.fit()
+      terminal.focus()
     }
   })
 
   window.api.setColorText((color) => {
-    const cor = getComputedStyle(document.documentElement).getPropertyValue(`--${color}`).trim()
+    const colorText = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--${color}`)
+      .trim()
 
     terminal.options.theme = {
       ...terminal.options.theme,
-      foreground: cor
+      foreground: colorText
     }
   })
 
   window.api.setTheme(() => {
-    const cor = getComputedStyle(document.documentElement).getPropertyValue(`--background`).trim()
+    const backgroundColor = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--background`)
+      .trim()
+
+    const colorText = getComputedStyle(document.documentElement)
+      .getPropertyValue(`--lightGrey`)
+      .trim()
 
     terminal.options.theme = {
       ...terminal.options.theme,
-      background: cor
+      background: backgroundColor,
+      foreground: colorText
     }
   })
 
   window.api.setEditor(({ type }) => {
     if (type === 'terminal') {
-      const txtEditor = document.getElementById('txtEditor')
-      const terminalDiv = document.getElementById('terminal')
-      const codeEditor = document.getElementById('codeEditor')
-      
-      if (txtEditor) txtEditor.style.display = 'none'
-      if (codeEditor) codeEditor.style.display = 'none'
-      if (terminalDiv) {
-        terminalDiv.style.display = 'block'
-        // Ajustar terminal após torná-lo visível
-        setTimeout(fitTerminal, 10)
-        setTimeout(fitTerminal, 100)
-      }
-      
       command = ''
+      commandIndex = 0
+      terminal.write('\x1b[2J\x1b[H')
       terminal.clear()
       terminal.prompt()
     }

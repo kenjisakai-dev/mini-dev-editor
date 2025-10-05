@@ -3,28 +3,7 @@
 :root {
   --background: #1f1f1f;
   --lightGrey: #d6d6d6;
- #terminal {
-  display: none;
-  width: 100%;
-  height: 100%;
-  background-color: var(--background);
-  overflow: hidden;
-  box-sizing: border-box;
-  position: relative;
-}
-
-#terminal .xterm {
-  padding-left: 40px !important;
-  box-sizing: border-box !important;
-}
-
-#terminal .xterm-viewport {
-  width: 100% !important;
-}
-
-#terminal *:focus {
-  outline: none;
-}5b567;
+  --yellow: #e5b567;
   --blue: #9cdcfe;
   --grey: #858585;
   --orange: #e87d3e;
@@ -46,12 +25,18 @@
 }
 
 html,
-body,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+}
+
 #container,
 #txtEditor {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background-color: var(--background);
 }
 
 #txtEditor {
@@ -108,7 +93,7 @@ body,
   float: left;
   background-color: var(--background);
   overflow: hidden;
-  padding-left: 20px;
+  margin-left: 20px;
 }
 
 #terminal *:focus {

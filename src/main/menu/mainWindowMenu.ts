@@ -555,8 +555,10 @@ export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   })
 
   templateMenu.append(menuEditorType)
-  templateMenu.append(menuFile)
-  templateMenu.append(menuEditor)
+  if (config.getEditor().type !== 'terminal') {
+    templateMenu.append(menuFile)
+    templateMenu.append(menuEditor)
+  }
   templateMenu.append(menuPreferences)
   templateMenu.append(menuHelp)
 
