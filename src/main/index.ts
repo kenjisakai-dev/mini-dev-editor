@@ -33,8 +33,8 @@ function createWindow(): void {
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
-    setEditor(mainWindow, config.getEditor())
     setColorText(mainWindow, config.getColorText())
+    setEditor(mainWindow, config.getEditor())
     setTheme(mainWindow, config.getTheme())
     setThemeCode(mainWindow, config.getThemeCode())
     setFont(mainWindow, config.getFont())

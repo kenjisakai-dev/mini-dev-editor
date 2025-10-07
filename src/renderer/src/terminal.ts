@@ -63,25 +63,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     'PageDown'
   ]
 
-  let historyCommands = await window.api.getHistoryCommands()
+  let historyCommands: string[] = await window.api.getHistoryCommands()
   let historyIndex = historyCommands.length
 
-  terminal.onKey((event: { key: string; domEvent: KeyboardEvent }) => {
+  terminal.onKey(async (event: { key: string; domEvent: KeyboardEvent }) => {
     const ev = event.domEvent
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey
     key = ev.key
 
-    if (key === 'Enter') enterCommand()
-    else if (key === 'Backspace') backspaceCommand()
-    else if (key === 'Delete') deleteCommand()
-    else if (key === 'ArrowUp') arrowUpCommand()
-    else if (key === 'ArrowDown') arrowDownCommand()
-    else if (key === 'ArrowLeft') arrowLeftCommand()
-    else if (key === 'ArrowRight') arrowRightCommand()
-    else if (key === 'Home') homeCommand()
-    else if (key === 'End') endCommand()
+    if (key === 'Enter') await enterCommand()
+    else if (key === 'Backspace') await backspaceCommand()
+    else if (key === 'Delete') await deleteCommand()
+    else if (key === 'ArrowUp') await arrowUpCommand()
+    else if (key === 'ArrowDown') await arrowDownCommand()
+    else if (key === 'ArrowLeft') await arrowLeftCommand()
+    else if (key === 'ArrowRight') await arrowRightCommand()
+    else if (key === 'Home') await homeCommand()
+    else if (key === 'End') await endCommand()
     else if (keysIgnore.includes(key)) return
-    else if (printable) writeCommand()
+    else if (printable) await writeCommand()
   })
 
   async function enterCommand() {
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     commandIndex = 0
   }
 
-  function backspaceCommand() {
+  async function backspaceCommand() {
     if (commandIndex > 0) {
       command = command.slice(0, commandIndex - 1) + command.slice(commandIndex)
       commandIndex--
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function deleteCommand() {
+  async function deleteCommand() {
     if (commandIndex < command.length) {
       command = command.slice(0, commandIndex) + command.slice(commandIndex + 1)
       terminal.write('\x1b[2K\r> ' + command)
@@ -110,14 +110,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function writeCommand() {
+  async function writeCommand() {
     command = command.slice(0, commandIndex) + key + command.slice(commandIndex)
     commandIndex++
     terminal.write('\x1b[2K\r> ' + command)
     terminal.write(`\x1b[${commandIndex + 3}G`)
   }
 
-  function arrowUpCommand() {
+  async function arrowUpCommand() {
     if (historyCommands.length > 0 && historyIndex > 0) {
       historyIndex--
       command = historyCommands[historyIndex] || ''
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function arrowDownCommand() {
+  async function arrowDownCommand() {
     if (historyCommands.length > 0 && historyIndex < historyCommands.length - 1) {
       historyIndex++
       command = historyCommands[historyIndex] || ''
@@ -137,27 +137,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function arrowLeftCommand() {
+  async function arrowLeftCommand() {
     if (commandIndex > 0) {
       commandIndex--
       terminal.write('\x1b[1D')
     }
   }
 
-  function arrowRightCommand() {
+  async function arrowRightCommand() {
     if (commandIndex < command.length) {
       commandIndex++
       terminal.write('\x1b[1C')
     }
   }
 
-  function homeCommand() {
+  async function homeCommand() {
     commandIndex = 0
     terminal.write('\x1b[2K\r> ' + command)
     terminal.write('\x1b[3G')
   }
 
-  function endCommand() {
+  async function endCommand() {
     commandIndex = command.length
     terminal.write('\x1b[2K\r> ' + command)
     terminal.write(`\x1b[${commandIndex + 3}G`)
@@ -200,21 +200,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       .getPropertyValue(`--background`)
       .trim()
 
-    const colorText = getComputedStyle(document.documentElement)
-      .getPropertyValue(`--lightGrey`)
-      .trim()
-
     terminal.options.theme = {
       ...terminal.options.theme,
-      background: backgroundColor,
-      foreground: colorText
+      background: backgroundColor
     }
   })
 
-  window.api.setEditor(({ type }) => {
+  window.api.setEditor(async ({ type }) => {
     if (type === 'terminal') {
       command = ''
       commandIndex = 0
+      historyCommands = await window.api.getHistoryCommands()
+      historyIndex = historyCommands.length
       terminal.write('\x1b[2J\x1b[H')
       terminal.clear()
       terminal.prompt()
