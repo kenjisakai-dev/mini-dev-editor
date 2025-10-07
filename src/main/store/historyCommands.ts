@@ -1,16 +1,6 @@
 import Store from 'electron-store'
 import config from '@main/preferences/config'
-
-interface HistoryCommands {
-  commands: string[]
-  lastCommand: string
-}
-
-interface AllHistoryCommands {
-  pwsh: HistoryCommands
-  cmd: HistoryCommands
-  powershell: HistoryCommands
-}
+import { AllHistoryCommands } from '@main/shared/interfaces/historyCommands'
 
 const store = new Store<AllHistoryCommands>({
   defaults: {

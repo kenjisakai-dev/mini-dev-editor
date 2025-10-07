@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron'
 import { Font } from '@main/shared/types/font'
-import { store } from '@main/store/store'
+import { store } from '@main/store/settings'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
 
 export function setFont(mainWindow: BrowserWindow, font: Font) {

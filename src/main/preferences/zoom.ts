@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron'
-import { store } from '@main/store/store'
+import { store } from '@main/store/settings'
 import config from '@main/preferences/config'
 
 export function setZoom(mainWindow: BrowserWindow, zoom: number) {

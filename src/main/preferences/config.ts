@@ -1,4 +1,4 @@
-import { store } from '@main/store/store'
+import { store } from '@main/store/settings'
 
 export default {
   getColorText: () => store.get('colorText', 'lightGrey'),

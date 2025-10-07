@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron'
-import { store } from '@main/store/store'
+import { store } from '@main/store/settings'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
 import { EditorType } from '@main/shared/types/editor'
 

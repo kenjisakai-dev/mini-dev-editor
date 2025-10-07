@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import { spawn } from 'child_process'
 import config from '@main/preferences/config'
-import { readCommands, appendCommand } from '@main/historyCommands'
+import { readCommands, appendCommand } from '@main/store/historyCommands'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
 
 export default (mainWindow: BrowserWindow) => {

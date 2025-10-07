@@ -1,5 +1,5 @@
 import { BrowserWindow, nativeTheme } from 'electron'
-import { store } from '@main/store/store'
+import { store } from '@main/store/settings'
 import IPC_HANDLER from '@main/shared/constants/ipcHandler'
 import { Theme, ThemeCode } from '@main/shared/types/theme'
 
