@@ -1,7 +1,7 @@
 {
   "name": "mini-dev-editor",
   "version": "1.0.0",
-  "description": "A minimal Electron application with TypeScript",
+  "description": "mini-dev-editor application",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",

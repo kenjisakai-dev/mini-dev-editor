@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.electron.mini-dev-editor
 productName: mini-dev-editor
 directories:
   buildResources: build
@@ -31,13 +31,13 @@ dmg:
 linux:
   target:
     - AppImage
-    - snap
     - deb
+    - rpm
+    - pacman
+    - freebsd
   maintainer: electronjs.org
   category: Utility
+  synopsis: ${description}
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish:
-  provider: generic
-  url: https://example.com/auto-updates
