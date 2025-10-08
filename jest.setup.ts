@@ -24,13 +24,17 @@ export class MockBrowserWindow {
 ;(global as any).mainWindow = new MockBrowserWindow()
 
 jest.mock('electron-store', () => {
-  return {
-    default: function () {
-      return {
-        get: jest.fn(() => 'text'),
-        set: jest.fn(),
-        clear: jest.fn()
-      }
-    }
-  }
+  return jest.fn().mockImplementation(() => ({
+    get: jest.fn((key, def) => {
+      if (key === 'editor') return { type: 'text', name: 'txt' }
+      if (key === 'theme') return 'system'
+      if (key === 'colorText') return 'lightGrey'
+      if (key === 'themeCode') return 'material-darker'
+      if (key === 'font') return 'Inter'
+      if (key === 'zoom') return 1.2
+      return def || { type: 'text', name: 'txt' }
+    }),
+    set: jest.fn(),
+    clear: jest.fn()
+  }))
 })
