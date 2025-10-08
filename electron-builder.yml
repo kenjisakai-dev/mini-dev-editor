@@ -11,6 +11,10 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+publish:
+  provider: github
+  owner: kenjisakai-dev
+  repo: mini-dev-editor
 win:
   executableName: mini-dev-editor
 nsis:
