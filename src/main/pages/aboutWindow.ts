@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, app } from 'electron'
 import path from 'path'
 import config from '@main/preferences/config'
 import { setTheme } from '@main/preferences/theme'
@@ -8,10 +8,14 @@ export function createAboutWindow() {
   const mainWindow = BrowserWindow.getFocusedWindow()
 
   if (mainWindow) {
+    const iconPath = app.isPackaged
+      ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources', 'icon.png')
+      : path.join(__dirname, '../../resources/icon.png')
+
     const aboutWindow = new BrowserWindow({
       width: 320,
       height: 160,
-      icon: path.join(__dirname, '../../resources/icon.png'),
+      icon: iconPath,
       autoHideMenuBar: true,
       resizable: is.dev,
       minimizable: is.dev,
@@ -23,7 +27,7 @@ export function createAboutWindow() {
       }
     })
 
-    aboutWindow.loadFile(path.join(__dirname, '../../src/renderer/src/pages/about/about.html'))
+    aboutWindow.loadFile(path.join(__dirname, '../renderer/src/pages/about/about.html'))
 
     aboutWindow.on('ready-to-show', () => {
       setTheme(aboutWindow, config.getTheme())

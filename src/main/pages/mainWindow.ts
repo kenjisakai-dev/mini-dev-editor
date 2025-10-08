@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, app } from 'electron'
 import path, { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { mainWindowMenu } from '@main/menu/mainWindowMenu'
@@ -12,11 +12,15 @@ import createTerminal from '@main/helpers/terminal'
 import createShortcuts from '@main/helpers/shortcuts'
 
 export function createMainWindow() {
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'app.asar.unpacked', 'resources', 'icon.png')
+    : path.join(__dirname, '../../resources/icon.png')
+
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
-    icon: path.join(__dirname, '../../resources/icon.png'),
+    icon: iconPath,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -30,7 +34,7 @@ export function createMainWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../../src/renderer/about.html'))
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
   mainWindow.webContents.on('did-finish-load', () => {

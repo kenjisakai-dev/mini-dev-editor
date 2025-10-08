@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, MenuItem, nativeTheme } from 'electron'
+import { BrowserWindow, Menu, MenuItem, nativeTheme, app } from 'electron'
 import path from 'path'
 import { setColorText } from '@main/preferences/color'
 import config from '@main/preferences/config'
@@ -18,13 +18,22 @@ import { createAboutWindow } from '@main/pages/aboutWindow'
 
 export const mainWindowMenu = (mainWindow: BrowserWindow) => {
   const getIcon = (icon: string) => {
-    return path.join(__dirname, `../../src/main/menu/icons/${icon}.png`)
+    if (app.isPackaged) {
+      return path.join(process.resourcesPath, 'app.asar.unpacked', 'resources', `${icon}.png`)
+    } else {
+      return path.join(__dirname, `../../resources/${icon}.png`)
+    }
   }
 
   const getIconTheme = (icon: string) => {
     const isDark = nativeTheme.shouldUseDarkColors
     const iconTheme = isDark ? `${icon}-dark.png` : `${icon}-light.png`
-    return path.resolve(__dirname, `../../src/main/menu/icons`, iconTheme)
+
+    if (app.isPackaged) {
+      return path.join(process.resourcesPath, 'app.asar.unpacked', 'resources', iconTheme)
+    } else {
+      return path.join(__dirname, `../../resources/${iconTheme}`)
+    }
   }
 
   const templateMenu = Menu.buildFromTemplate([])

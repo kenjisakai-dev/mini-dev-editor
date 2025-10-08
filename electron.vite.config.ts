@@ -14,6 +14,14 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin(), tsConfigPaths]
   },
   renderer: {
-    plugins: [externalizeDepsPlugin(), tsConfigPaths]
+    plugins: [externalizeDepsPlugin(), tsConfigPaths],
+    build: {
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'src/renderer/index.html'),
+          about: path.resolve(__dirname, 'src/renderer/src/pages/about/about.html')
+        }
+      }
+    }
   }
 })
