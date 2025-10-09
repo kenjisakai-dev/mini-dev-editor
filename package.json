@@ -1,6 +1,6 @@
 {
   "name": "mini-dev-editor",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "mini-dev-editor application",
   "main": "./out/main/index.js",
   "author": "example.com",
