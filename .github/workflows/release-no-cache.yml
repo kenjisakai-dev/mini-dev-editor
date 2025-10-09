@@ -1,3 +1,5 @@
+name: Release (No Cache)
+
 on:
   push:
     tags: ['v*']
