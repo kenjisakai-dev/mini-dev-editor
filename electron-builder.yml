@@ -36,9 +36,6 @@ linux:
   target:
     - AppImage
     - deb
-    - rpm
-    - pacman
-    - freebsd
   maintainer: electronjs.org
   category: Utility
   synopsis: ${description}
